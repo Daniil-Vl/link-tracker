@@ -2,7 +2,6 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.persistence.ResourceDB;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class HelpCommand implements Command {
-    private final ResourceDB resourceDB;
 
     private List<Command> availableCommands = List.of(
         new StartCommand(null),

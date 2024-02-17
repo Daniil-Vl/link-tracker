@@ -17,7 +17,7 @@ public class MenuCreator implements CommandLineRunner {
     private final CommandManager commandManager;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         log.info("Try to send setMyCommands request to create 'menu' button in ui");
         SetMyCommands request = new SetMyCommands(
             commandManager
