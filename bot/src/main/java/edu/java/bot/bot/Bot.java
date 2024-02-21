@@ -51,7 +51,7 @@ public class Bot implements AutoCloseable {
         log.info("Try to send setMyCommands request to create 'menu' button in ui");
         SetMyCommands request = new SetMyCommands(
             commandManager
-                .getAvailableCommands()
+                .getCommands()
                 .stream()
                 .map(Command::toApiCommand)
                 .toArray(BotCommand[]::new)

@@ -14,7 +14,7 @@ public class UntrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenCommandWithoutArguments_whenHandleUnTrack_thenReturnHelpMessage() {
+    void givenCommandWithoutArguments_whenHandleUnTrack_thenReturnHelpMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/untrack");
 
@@ -31,7 +31,7 @@ public class UntrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenUnsupportedURL_whenHandleUnTrack_thenReturnUnsupportedURLMessage() {
+    void givenUnsupportedURL_whenHandleUnTrack_thenReturnUnsupportedURLMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/untrack unsupported_resource");
 
@@ -48,7 +48,7 @@ public class UntrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenInvalidURL_whenHandleUnTrack_thenReturnInvalidURLMessage() {
+    void givenInvalidURL_whenHandleUnTrack_thenReturnInvalidURLMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/track \"github\"");
 
@@ -65,7 +65,7 @@ public class UntrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenNonTrackingURL_whenHandleUnTrack_thenReturnUntrackNonTrackedMessage() {
+    void givenNonTrackingURL_whenHandleUnTrack_thenReturnUntrackNonTrackedMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/track " + newLink.url().toString());
 

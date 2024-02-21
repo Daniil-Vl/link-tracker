@@ -3,6 +3,7 @@ package edu.java.bot.commands;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.message.ReplyMessages;
 import java.util.Map;
+import edu.java.bot.persistence.exceptions.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,7 +15,7 @@ public class StartCommandTest extends CommandTest {
     }
 
     @Test
-    void givenDB_whenExistingUserStart_thenReturnReplyMessageAlreadySignedIn() {
+    void givenDB_whenExistingUserStart_thenReturnReplyMessageAlreadySignedIn() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
 
         SendMessage expectedSendMessage = new SendMessage(
@@ -30,7 +31,7 @@ public class StartCommandTest extends CommandTest {
     }
 
     @Test
-    void givenDB_whenNewUserStart_thenSuccessfullyAddNewUserToDB() {
+    void givenDB_whenNewUserStart_thenSuccessfullyAddNewUserToDB() throws UserNotFoundException {
         initMockedUpdateWithId(nonExistentUserId);
 
         SendMessage expectedSendMessage = new SendMessage(

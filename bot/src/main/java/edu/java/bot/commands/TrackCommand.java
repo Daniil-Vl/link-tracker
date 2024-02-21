@@ -37,16 +37,17 @@ public class TrackCommand implements Command {
 
     @SuppressWarnings("ReturnCount")
     @Override
-    public SendMessage handle(Update update) {
+    public SendMessage handle(Update update) throws UserNotFoundException {
         long userId = update.message().chat().id();
         String[] tokens = update.message().text().split(" ");
 
+        if (!resourceDB.userExists(userId)) {
+            throw new UserNotFoundException("Cannot use /track command for unauthenticated user");
+        }
+
         if (tokens.length < 2) {
             log.warn("Received /track without arguments");
-            return new SendMessage(
-                userId,
-                helpMessage()
-            );
+            return new SendMessage(userId, helpMessage());
         }
 
         String resourceURI = tokens[1];
@@ -60,13 +61,11 @@ public class TrackCommand implements Command {
             }
 
             log.info("Successfully added new resources = %s to the user with id = %s".formatted(resourceURI, userId));
+
             return new SendMessage(userId, ReplyMessages.ADD_NEW_RESOURCE.getText());
         } catch (UnsupportedResourceURL e) {
             log.warn("Tried to add unsupported resource with uri - %s".formatted(resourceURI));
             return new SendMessage(userId, ReplyMessages.UNSUPPORTED_RESOURCE_URI.getText());
-        } catch (UserNotFoundException exception) {
-            log.error("Tried to add resources to non-existent user with id = %s".formatted(userId));
-            throw new RuntimeException(exception);
         } catch (InvalidURL e) {
             log.warn("Tried to add invalid uri - %s".formatted(resourceURI));
             return new SendMessage(userId, ReplyMessages.INVALID_URL.getText());

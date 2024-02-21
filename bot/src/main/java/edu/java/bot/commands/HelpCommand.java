@@ -31,13 +31,14 @@ public class HelpCommand implements Command {
     @Override
     public String helpMessage() {
         StringBuilder stringBuilder = new StringBuilder();
+
         stringBuilder.append("These bot is designed to help you track links from various internet resources\n\n");
         stringBuilder.append("You can control me by sending these commands: \n");
 
-        List<Command> availableCommands = commandManager.getAvailableCommands();
+        List<Command> commands = commandManager.getCommands();
 
-        for (int ind = 0; ind < availableCommands.size(); ind++) {
-            Command command = availableCommands.get(ind);
+        for (int ind = 0; ind < commands.size(); ind++) {
+            Command command = commands.get(ind);
             stringBuilder.append("%d) %s - %s\n".formatted(ind + 1, command.command(), command.description()));
         }
 

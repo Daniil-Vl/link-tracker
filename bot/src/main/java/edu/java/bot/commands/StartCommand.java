@@ -38,6 +38,7 @@ public class StartCommand implements Command {
         }
 
         resourceDB.addUser(userId);
+
         log.info("New user with id = %s and username = %s signed up".formatted(
             userId,
             update.message().chat().username()

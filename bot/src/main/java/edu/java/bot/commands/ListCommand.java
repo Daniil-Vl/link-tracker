@@ -45,20 +45,15 @@ public class ListCommand implements Command {
     }
 
     @Override
-    public SendMessage handle(Update update) {
+    public SendMessage handle(Update update) throws UserNotFoundException {
         long userId = update.message().chat().id();
 
-        try {
-            List<Link> trackedResources = resourceDB.getTrackedResources(userId);
+        List<Link> trackedResources = resourceDB.getTrackedResources(userId);
 
-            if (trackedResources.isEmpty()) {
-                return new SendMessage(userId, ReplyMessages.EMPTY_RESOURCE_LIST.getText());
-            }
-
-            return new SendMessage(userId, buildListMessage(trackedResources));
-        } catch (UserNotFoundException e) {
-            log.error("Tried to get list of tracked resources of non-existent user with id = %s".formatted(userId));
-            throw new RuntimeException(e);
+        if (trackedResources.isEmpty()) {
+            return new SendMessage(userId, ReplyMessages.EMPTY_RESOURCE_LIST.getText());
         }
+
+        return new SendMessage(userId, buildListMessage(trackedResources));
     }
 }

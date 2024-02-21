@@ -14,7 +14,7 @@ public class TrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenCommandWithoutArguments_whenHandleTrack_thenReturnHelpMessage() {
+    void givenCommandWithoutArguments_whenHandleTrack_thenReturnHelpMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/track");
 
@@ -31,7 +31,7 @@ public class TrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenUnsupportedURL_whenHandleTrack_thenReturnUnsupportedURLMessage() {
+    void givenUnsupportedURL_whenHandleTrack_thenReturnUnsupportedURLMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/track unsupported_resource");
 
@@ -48,7 +48,7 @@ public class TrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenInvalidURL_whenHandleTrack_thenReturnInvalidURLMessage() {
+    void givenInvalidURL_whenHandleTrack_thenReturnInvalidURLMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/track \"github\"");
 
@@ -65,7 +65,7 @@ public class TrackCommandTest extends CommandTest {
     }
 
     @Test
-    void givenAlreadyTrackingURL_whenHandleTrack_thenReturnAlreadyTrackingMessage() {
+    void givenAlreadyTrackingURL_whenHandleTrack_thenReturnAlreadyTrackingMessage() throws UserNotFoundException {
         initMockedUpdateWithId(userId);
         setMessageText("/track " + tracedLink.url().toString());
 

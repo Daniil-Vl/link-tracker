@@ -17,7 +17,7 @@ public enum ReplyMessages {
     UNTRACK_NON_TRACKED("You cannot remove resources, which you wasn't track"),
     SUCCESSFUL_REMOVE("Resource was successfully removed"),
     REQUIRE_SIGNING_IN("Please start with command /start to sign in first"),
-    UNKNOWN_COMMAND(
+    UNSUPPORTED_COMMAND(
         """
             Sorry, I don't know how to process this command,\s
             Please, use only allowed commands:\s
