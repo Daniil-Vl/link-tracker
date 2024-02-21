@@ -32,7 +32,7 @@ public class ListCommand implements Command {
         return "help message for /list";
     }
 
-    private String buildListMessage(List<Link> trackedResources) throws UserNotFoundException {
+    private String buildListMessage(List<Link> trackedResources) {
         StringBuilder replyMessageBuilder = new StringBuilder();
         replyMessageBuilder.append("List of your tracked resources: \n");
 
