@@ -7,11 +7,11 @@ import java.time.OffsetDateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.HttpHeaders.CONTENT_TYPE;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @WireMockTest
@@ -121,7 +121,8 @@ class GithubClientImplTest {
             OffsetDateTime.parse("2022-06-09T12:47:28Z")
         );
 
-        GithubEventResponse actualResponse = githubClient.getLatestUpdates(author, repository, numberOfUpdates).getFirst();
+        GithubEventResponse actualResponse =
+            githubClient.getLatestUpdates(author, repository, numberOfUpdates).getFirst();
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
     }
