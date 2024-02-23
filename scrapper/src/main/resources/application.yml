@@ -4,6 +4,13 @@ app:
     interval: 10s
     force-check-delay: 10s
 
+  api:
+    github:
+      base-url: https://api.github.com
+      access-token: ${GITHUB_ACCESS_TOKEN}
+    stackoverflow:
+      base-url: https://api.stackexchange.com
+
 spring:
   application:
     name: scrapper
@@ -13,3 +20,4 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
