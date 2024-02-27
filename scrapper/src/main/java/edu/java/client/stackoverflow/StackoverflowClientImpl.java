@@ -40,10 +40,7 @@ public class StackoverflowClientImpl implements StackoverflowClient {
             .bodyToMono(Response.class)
             .block();
 
-        Question question = null;
-        if (response != null) {
-            question = response.questions().getFirst();
-        }
+        Question question = response.questions().getFirst();
 
         return new StackoverflowQuestionResponse(
             question.id(),
