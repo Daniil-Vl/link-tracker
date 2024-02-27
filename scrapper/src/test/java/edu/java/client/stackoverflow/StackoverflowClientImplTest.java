@@ -3,6 +3,9 @@ package edu.java.client.stackoverflow;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -18,6 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @WireMockTest
 class StackoverflowClientImplTest {
+    private final static Path TEST_FILES_PATH = Path.of("src", "test", "resources", "stackoverflow");
     private WireMockServer server;
     private StackoverflowClient stackoverflowClient;
 
@@ -34,48 +38,12 @@ class StackoverflowClientImplTest {
     }
 
     @Test
-    void givenQuestionId_whenGetQuestion_thenReturnValidStackoverflowUpdateResponse() {
+    void givenQuestionId_whenGetQuestion_thenReturnValidStackoverflowUpdateResponse() throws IOException {
         Long questionId = 1234L;
 
-        String expectedResponseBody = """
-            {
-              "items": [
-                {
-                   "tags": [
-                     "windows",
-                     "c#",
-                     ".net"
-                   ],
-                   "owner": {
-                     "reputation": 9001,
-                     "user_id": 1,
-                     "user_type": "registered",
-                     "accept_rate": 55,
-                     "profile_image": "https://www.gravatar.com/avatar/a007be5a61f6aa8f3e85ae2fc18dd66e?d=identicon&r=PG",
-                     "display_name": "Example User",
-                     "link": "https://example.stackexchange.com/users/1/example-user"
-                   },
-                   "is_answered": false,
-                   "view_count": 31415,
-                   "favorite_count": 1,
-                   "down_vote_count": 2,
-                   "up_vote_count": 3,
-                   "answer_count": 0,
-                   "score": 1,
-                   "last_activity_date": 1708675776,
-                   "creation_date": 1708632576,
-                   "last_edit_date": 1708700976,
-                   "question_id": 1234,
-                   "link": "https://example.stackexchange.com/questions/1234/an-example-post-title",
-                   "title": "An example post title",
-                   "body": "An example post body"
-                 }
-              ],
-              "has_more": false,
-              "quota_max": 300,
-              "quota_remaining": 288
-            }
-            """;
+        String expectedResponseBody = Files.readString(
+            TEST_FILES_PATH.resolve("expected_response_body.json")
+        );
 
         server.stubFor(
             get("/2.3/questions/%s?site=stackoverflow".formatted(questionId))
