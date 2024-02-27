@@ -10,17 +10,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Log4j2
 public class GithubClientImpl implements GithubClient {
     private final WebClient webClient;
-    private final String accessToken;
     private String baseURL = "https://api.github.com";
 
     public GithubClientImpl(String baseURL, String accessToken) {
         this.baseURL = baseURL;
-        this.accessToken = accessToken;
         this.webClient = buildWebClient(baseURL, accessToken);
     }
 
     public GithubClientImpl(String accessToken) {
-        this.accessToken = accessToken;
         this.webClient = buildWebClient(baseURL, accessToken);
     }
 
