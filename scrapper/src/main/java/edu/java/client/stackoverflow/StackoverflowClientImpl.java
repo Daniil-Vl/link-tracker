@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 public class StackoverflowClientImpl implements StackoverflowClient {
@@ -20,11 +21,20 @@ public class StackoverflowClientImpl implements StackoverflowClient {
 
     public StackoverflowClientImpl(String baseURL) {
         this.baseURL = baseURL;
-        this.webClient = WebClient.builder().baseUrl(baseURL).build();
+        this.webClient = buildWebClient(baseURL);
     }
 
     public StackoverflowClientImpl() {
-        this.webClient = WebClient.builder().baseUrl(baseURL).build();
+        this.webClient = buildWebClient(baseURL);
+    }
+
+    private WebClient buildWebClient(String baseURL) {
+        return WebClient.builder()
+            .baseUrl(baseURL)
+            .defaultHeaders(httpHeaders -> {
+                httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+            })
+            .build();
     }
 
     @Override
@@ -34,12 +44,14 @@ public class StackoverflowClientImpl implements StackoverflowClient {
         Response response = webClient
             .get()
             .uri(endpoint)
-            .header("Accept", "application/json")
             .retrieve()
             .bodyToMono(Response.class)
             .block();
 
-        Question question = response.questions().getFirst();
+        Question question = null;
+        if (response != null) {
+            question = response.questions().getFirst();
+        }
 
         return new StackoverflowQuestionResponse(
             question.id(),

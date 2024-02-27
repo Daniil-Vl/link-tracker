@@ -16,19 +16,22 @@ public class GithubClientImpl implements GithubClient {
     public GithubClientImpl(String baseURL, String accessToken) {
         this.baseURL = baseURL;
         this.accessToken = accessToken;
-        this.webClient =
-            WebClient.builder()
-                .baseUrl(baseURL)
-                .defaultHeaders(httpHeaders -> {
-                    httpHeaders.setBearerAuth(accessToken);
-                    httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
-                })
-                .build();
+        this.webClient = buildWebClient(baseURL, accessToken);
     }
 
     public GithubClientImpl(String accessToken) {
         this.accessToken = accessToken;
-        this.webClient = WebClient.builder().baseUrl(baseURL).build();
+        this.webClient = buildWebClient(baseURL, accessToken);
+    }
+
+    private WebClient buildWebClient(String baseURL, String accessToken) {
+        return WebClient.builder()
+            .baseUrl(baseURL)
+            .defaultHeaders(httpHeaders -> {
+                httpHeaders.setBearerAuth(accessToken);
+                httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
+            })
+            .build();
     }
 
     @Override
