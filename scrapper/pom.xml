@@ -118,6 +118,12 @@
             <artifactId>kafka</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Models -->
+        <dependency>
+            <groupId>edu.java</groupId>
+            <artifactId>models</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
