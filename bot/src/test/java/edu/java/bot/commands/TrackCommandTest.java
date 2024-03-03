@@ -1,8 +1,9 @@
 package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.message.ReplyMessages;
-import edu.java.bot.persistence.exceptions.UserNotFoundException;
+import edu.java.bot.telegram.commands.TrackCommand;
+import edu.java.bot.telegram.message.ReplyMessages;
+import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;

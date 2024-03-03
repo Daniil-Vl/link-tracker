@@ -1,6 +1,6 @@
 package edu.java.bot;
 
-import edu.java.bot.configuration.ApplicationConfig;
+import edu.java.bot.telegram.configuration.ApplicationConfig;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
