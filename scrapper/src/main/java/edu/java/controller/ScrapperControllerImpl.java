@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
+@SuppressWarnings("MultipleStringLiterals")
 public class ScrapperControllerImpl implements ScrapperController {
     @Override
     public String registerChat(Integer id) {
