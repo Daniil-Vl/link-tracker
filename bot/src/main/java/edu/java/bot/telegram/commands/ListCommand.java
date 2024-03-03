@@ -7,7 +7,6 @@ import edu.java.bot.telegram.message.ReplyMessages;
 import edu.java.bot.telegram.persistence.ResourceDB;
 import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
