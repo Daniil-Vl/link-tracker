@@ -49,6 +49,9 @@
 
         <!-- Models-->
         <models.version>0.1</models.version>
+
+        <!-- Swagger-->
+        <openapi.version>2.3.0</openapi.version>
     </properties>
 
     <modules>
@@ -106,6 +109,13 @@
                 <groupId>edu.java</groupId>
                 <artifactId>models</artifactId>
                 <version>${models.version}</version>
+            </dependency>
+
+            <!-- Swagger-->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${openapi.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
