@@ -19,9 +19,11 @@ public record ApplicationConfig(
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
 
-    public record Api(@NotNull Github github, @NotNull Stackoverflow stackoverflow) {
-        public record Github(@NotBlank String baseUrl, @NotBlank String accessToken) {
+    public record Api(@NotNull Bot bot, @NotNull Github github, @NotNull Stackoverflow stackoverflow) {
+        public record Bot(@NotBlank String baseUrl) {
+        }
 
+        public record Github(@NotBlank String baseUrl, @NotBlank String accessToken) {
         }
 
         public record Stackoverflow(@NotBlank String baseUrl) {
