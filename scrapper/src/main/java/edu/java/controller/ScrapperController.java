@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public interface ScrapperController {
                      ))
     })
     @PostMapping("/tg-chat/{id}")
-    String registerChat(@PathVariable Integer id);
+    String registerChat(@PathVariable @PositiveOrZero Integer id);
 
     @Operation(summary = "Удалить чат")
     @ApiResponses(value = {
@@ -51,7 +52,7 @@ public interface ScrapperController {
                      ))
     })
     @DeleteMapping("/tg-chat/{id}")
-    String deleteChat(@PathVariable Integer id);
+    String deleteChat(@PathVariable @PositiveOrZero Integer id);
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
     @ApiResponses(value = {
@@ -69,7 +70,7 @@ public interface ScrapperController {
                      ))
     })
     @GetMapping("/links")
-    ListLinksResponse getLinks(@RequestHeader(name = "Tg-Chat-Id") Integer tgChatId);
+    ListLinksResponse getLinks(@RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Integer tgChatId);
 
     @Operation(summary = "Добавить отслеживание ссылки")
     @ApiResponses(value = {
@@ -89,7 +90,7 @@ public interface ScrapperController {
     })
     @PostMapping("/links")
     LinkResponse addLink(
-        @RequestHeader(name = "Tg-Chat-Id") Integer tgChatId,
+        @RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Integer tgChatId,
         @RequestBody AddLinkRequest addLinkRequest
     );
 
@@ -116,7 +117,7 @@ public interface ScrapperController {
     })
     @DeleteMapping("/links")
     LinkResponse deleteLinks(
-        @RequestHeader(name = "Tg-Chat-Id") Integer tgChatId,
+        @RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Integer tgChatId,
         @RequestBody RemoveLinkRequest removeLinkRequest
     );
 }
