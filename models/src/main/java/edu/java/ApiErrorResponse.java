@@ -15,4 +15,10 @@ public record ApiErrorResponse(
     @JsonProperty("stacktrace")
     List<String> stacktrace
 ) {
+    @Override public String toString() {
+        return "ApiErrorResponse{"
+            + "exceptionName='" + exceptionName + '\''
+            + ", exceptionMessage='" + exceptionMessage + '\''
+            + '}';
+    }
 }
