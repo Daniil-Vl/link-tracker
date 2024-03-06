@@ -1,11 +1,10 @@
 package edu.java.scrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
+import java.net.URI;
 
 public record AddLinkRequest(
     @JsonProperty("link")
-    @NotBlank(message = "Link cannot be blank")
-    String link
+    URI link
 ) {
 }

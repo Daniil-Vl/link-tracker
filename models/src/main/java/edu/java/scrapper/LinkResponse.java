@@ -1,15 +1,14 @@
 package edu.java.scrapper;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
+import java.net.URI;
 
 public record LinkResponse(
     @JsonProperty("id")
     @PositiveOrZero(message = "Id must be non-negative")
     Integer id,
     @JsonProperty("url")
-    @NotBlank(message = "Url cannot be blank")
-    String url
+    URI url
 ) {
 }
