@@ -1,7 +1,7 @@
 package edu.java.bot.telegram.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
-import edu.java.bot.telegram.configuration.ApplicationConfig;
+import edu.java.bot.configuration.ApplicationConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Bean;
