@@ -17,11 +17,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Log4j2
 public class ScrapperClientImpl implements ScrapperClient {
     private static final String TG_CHAT_ID_HEADER_NAME = "Tg-Chat-Id";
-    private static final String REGISTER_CHAT_ENDPOINT = "/tg-chat/%s";
-    private static final String DELETE_CHAT_ENDPOINT = "/tg-chat/%s";
-    private static final String GET_LINKS_ENDPOINT = "/links";
-    private static final String ADD_LINK_ENDPOINT = "/links";
-    private static final String DELETE_LINKS_ENDPOINT = "/links";
+    private static final String TG_CHAT_ENDPOINT = "/tg-chat/%s";
+    private static final String LINKS_ENDPOINT = "/links";
     private final WebClient webClient;
     private String baseUrl = "http://localhost:8080";
 
@@ -55,7 +52,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public String registerChat(Integer id) {
         log.info("Register chat request starts");
-        String endpoint = REGISTER_CHAT_ENDPOINT.formatted(id);
+        String endpoint = TG_CHAT_ENDPOINT.formatted(id);
 
         String response = webClient
             .post()
@@ -71,7 +68,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     @Override
     public String deleteChat(Integer id) {
         log.info("Delete chat request starts");
-        String endpoint = DELETE_CHAT_ENDPOINT.formatted(id);
+        String endpoint = TG_CHAT_ENDPOINT.formatted(id);
 
         String response = webClient
             .delete()
@@ -90,7 +87,7 @@ public class ScrapperClientImpl implements ScrapperClient {
 
         ListLinksResponse response = webClient
             .get()
-            .uri(GET_LINKS_ENDPOINT)
+            .uri(LINKS_ENDPOINT)
             .header(TG_CHAT_ID_HEADER_NAME, tgChatId.toString())
             .retrieve()
             .bodyToMono(ListLinksResponse.class)
@@ -107,7 +104,7 @@ public class ScrapperClientImpl implements ScrapperClient {
 
         LinkResponse response = webClient
             .post()
-            .uri(ADD_LINK_ENDPOINT)
+            .uri(LINKS_ENDPOINT)
             .header(TG_CHAT_ID_HEADER_NAME, tgChatId.toString())
             .bodyValue(body)
             .retrieve()
@@ -124,7 +121,7 @@ public class ScrapperClientImpl implements ScrapperClient {
 
         LinkResponse response = webClient
             .method(HttpMethod.DELETE)
-            .uri(DELETE_LINKS_ENDPOINT)
+            .uri(LINKS_ENDPOINT)
             .header(TG_CHAT_ID_HEADER_NAME, tgChatId.toString())
             .bodyValue(removeLinkRequest)
             .retrieve()
