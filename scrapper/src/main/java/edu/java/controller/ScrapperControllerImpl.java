@@ -26,7 +26,7 @@ public class ScrapperControllerImpl implements ScrapperController {
     public ListLinksResponse getLinks(Integer tgChatId) {
         return new ListLinksResponse(
             List.of(new ListLinksResponse.LinkResponse(1, URI.create("url"))),
-            tgChatId
+            1
         );
     }
 
