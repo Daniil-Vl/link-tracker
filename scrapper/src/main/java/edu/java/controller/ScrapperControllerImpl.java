@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScrapperControllerImpl implements ScrapperController {
     @Override
     public String registerChat(Integer id) {
-        return "Chat %s has been successfully registered".formatted(id);
+        return "Chat has been successfully registered";
     }
 
     @Override
     public String deleteChat(Integer id) {
-        return "Chat %s was successfully deleted".formatted(id);
+        return "Chat has been successfully removed";
     }
 
     @Override
