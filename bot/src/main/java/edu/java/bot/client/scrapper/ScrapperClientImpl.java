@@ -38,13 +38,12 @@ public class ScrapperClientImpl implements ScrapperClient {
                 httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
             })
             .defaultStatusHandler(
-                HttpStatus.BAD_REQUEST::equals,
-                clientResponse -> {
-                    log.error("Failed to execute request");
-                    return clientResponse
+                httpStatusCode -> HttpStatus.NOT_FOUND.equals(httpStatusCode)
+                    || HttpStatus.BAD_REQUEST.equals(httpStatusCode),
+                clientResponse ->
+                    clientResponse
                         .bodyToMono(ApiErrorResponse.class)
-                        .map(ApiErrorException::new);
-                }
+                        .map(ApiErrorException::new)
             )
             .build();
     }
