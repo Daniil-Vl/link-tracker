@@ -124,6 +124,18 @@
             <artifactId>kafka</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Models -->
+        <dependency>
+            <groupId>edu.java</groupId>
+            <artifactId>models</artifactId>
+        </dependency>
+
+        <!-- Swagger-->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

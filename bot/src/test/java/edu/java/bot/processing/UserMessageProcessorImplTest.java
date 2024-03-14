@@ -4,11 +4,14 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.commands.Command;
-import edu.java.bot.commands.CommandManager.CommandManagerImpl;
-import edu.java.bot.message.ReplyMessages;
-import edu.java.bot.persistence.exceptions.UserNotFoundException;
+import edu.java.bot.telegram.commands.Command;
+import edu.java.bot.telegram.commands.CommandManager.CommandManagerImpl;
+import edu.java.bot.telegram.message.ReplyMessages;
+import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 import java.util.Map;
+
+import edu.java.bot.telegram.processing.UserMessageProcessor;
+import edu.java.bot.telegram.processing.UserMessageProcessorImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

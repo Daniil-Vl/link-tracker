@@ -5,6 +5,8 @@ app:
     force-check-delay: 10s
 
   api:
+    bot:
+      base-url: http://localhost:8090
     github:
       base-url: https://api.github.com
       access-token: ${GITHUB_ACCESS_TOKEN}
@@ -20,4 +22,8 @@ server:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
 

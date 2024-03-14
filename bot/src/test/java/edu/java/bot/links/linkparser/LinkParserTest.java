@@ -1,9 +1,10 @@
 package edu.java.bot.links.linkparser;
 
-import edu.java.bot.links.Link;
-import edu.java.bot.links.LinkType;
-import edu.java.bot.links.linkparser.exceptions.InvalidURL;
-import edu.java.bot.links.linkparser.exceptions.UnsupportedResourceURL;
+import edu.java.bot.telegram.links.Link;
+import edu.java.bot.telegram.links.LinkType;
+import edu.java.bot.telegram.links.linkparser.LinkParser;
+import edu.java.bot.telegram.links.linkparser.exceptions.InvalidURL;
+import edu.java.bot.telegram.links.linkparser.exceptions.UnsupportedResourceURL;
 import java.net.URI;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
