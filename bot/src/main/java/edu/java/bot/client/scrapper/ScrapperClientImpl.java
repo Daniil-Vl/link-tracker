@@ -19,6 +19,10 @@ public class ScrapperClientImpl implements ScrapperClient {
     private static final String TG_CHAT_ID_HEADER_NAME = "Tg-Chat-Id";
     private static final String TG_CHAT_ENDPOINT = "/tg-chat/%s";
     private static final String LINKS_ENDPOINT = "/links";
+    private static final List<HttpStatus> API_ERROR_RESPONSE_HTTP_CODES = List.of(
+        HttpStatus.NOT_FOUND,
+        HttpStatus.BAD_REQUEST
+    );
     private final WebClient webClient;
     private String baseUrl = "http://localhost:8080";
 
@@ -38,8 +42,8 @@ public class ScrapperClientImpl implements ScrapperClient {
                 httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
             })
             .defaultStatusHandler(
-                httpStatusCode -> HttpStatus.NOT_FOUND.equals(httpStatusCode)
-                    || HttpStatus.BAD_REQUEST.equals(httpStatusCode),
+                httpStatusCode -> API_ERROR_RESPONSE_HTTP_CODES.stream()
+                    .anyMatch(httpStatus -> httpStatus.isSameCodeAs(httpStatusCode)),
                 clientResponse ->
                     clientResponse
                         .bodyToMono(ApiErrorResponse.class)
