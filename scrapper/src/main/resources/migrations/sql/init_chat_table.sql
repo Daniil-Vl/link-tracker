@@ -3,8 +3,8 @@
 
 CREATE TABLE chat
 (
-    id      BIGINT NOT NULL,
     chat_id BIGINT NOT NULL,
 
-    PRIMARY KEY (id)
+    PRIMARY KEY (chat_id),
+    UNIQUE (chat_id)
 );
