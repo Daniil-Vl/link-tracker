@@ -14,6 +14,7 @@ public class ChatRepositoryJdbcImpl implements ChatRepository {
     private static final String ADD_CHAT_QUERY = "INSERT INTO chat(chat_id) VALUES (?)";
     private static final String REMOVE_CHAT_QUERY = "DELETE FROM chat WHERE chat_id = ?";
     private static final String FIND_ALL_QUERY = "SELECT * FROM chat";
+    private static final String FIND_BY_ID = "SELECT * FROM chat WHERE chat_id = ?";
 
     private final JdbcClient jdbcClient;
 
@@ -37,6 +38,15 @@ public class ChatRepositoryJdbcImpl implements ChatRepository {
 
         log.info("Rows removed: %s".formatted(rowsAffected));
         return rowsAffected;
+    }
+
+    @Override
+    public boolean isExists(Long chatId) {
+        return jdbcClient
+            .sql(FIND_BY_ID)
+            .param(chatId)
+            .query(Long.class)
+            .optional().isPresent();
     }
 
     @Override

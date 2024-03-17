@@ -3,6 +3,8 @@ package edu.java.dao;
 import edu.java.dto.dao.LinkDto;
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface LinkRepository {
@@ -10,28 +12,52 @@ public interface LinkRepository {
      * Add a new link to the database
      *
      * @param url - link url
-     * @return number of affected rows
+     * @return inserted link
      */
     @Transactional
-    int add(String url);
+    LinkDto add(String url);
 
     /**
      * Remove the link with given id
      *
      * @param linkId - link id
-     * @return number of affected rows
+     * @return removed link
      */
     @Transactional
-    int remove(Long linkId);
+    Optional<LinkDto> remove(Long linkId);
 
     /**
      * Remove the link with given url
      *
      * @param url - link rul
-     * @return number of affected rows
+     * @return removed link
      */
     @Transactional
-    int remove(String url);
+    Optional<LinkDto> remove(String url);
+
+    /**
+     * Find the link with given id
+     *
+     * @param linkId - link's id
+     * @return link with given id, if it exists, otherwise empty
+     */
+    Optional<LinkDto> findById(Long linkId);
+
+    /**
+     * Find the link with given url
+     *
+     * @param url - link's url
+     * @return link with given url, if it exists, otherwise empty
+     */
+    Optional<LinkDto> findByUrl(String url);
+
+    /**
+     * Return all links having id in given set
+     *
+     * @param setOfLinksId - set of links id
+     * @return list of links
+     */
+    List<LinkDto> findAllById(Set<Long> setOfLinksId);
 
     /**
      * Retrieve all links

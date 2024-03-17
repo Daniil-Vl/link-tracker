@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,47 +19,72 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Log4j2
 public class LinkRepositoryJdbcImpl implements LinkRepository {
-    private static final String ADD_LINK_QUERY = "INSERT INTO link(url, updated_at, last_check_time) VALUES (?, ?, ?)";
-    private static final String REMOVE_LINK_QUERY_BY_ID = "DELETE FROM link WHERE id = ?";
-    private static final String REMOVE_LINK_QUERY_BY_URL = "DELETE FROM link WHERE url = ?";
+    private static final String ADD_LINK_QUERY =
+        "INSERT INTO link(url, updated_at, last_check_time) VALUES (?, ?, ?) RETURNING *";
+    private static final String REMOVE_LINK_QUERY_BY_ID = "DELETE FROM link WHERE id = ? RETURNING *";
+    private static final String REMOVE_LINK_QUERY_BY_URL = "DELETE FROM link WHERE url = ? RETURNING *";
+    private static final String FIND_BY_ID_QUERY = "SELECT * FROM link WHERE id = ?";
+    private static final String FIND_BY_ID_URL = "SELECT * FROM link WHERE url = ?";
     private static final String FIND_ALL_QUERY = "SELECT * FROM link";
     private static final String FIND_ALL_QUERY_BY_TIME = "SELECT * FROM link WHERE last_check_time < ?";
+    private static final String FIND_ALL_BY_ID = "SELECT * FROM link WHERE id IN (?)";
 
     private final JdbcClient jdbcClient;
 
     @Override
-    public int add(String url) {
-        int rowsAffected = jdbcClient
+    public LinkDto add(String url) {
+        return jdbcClient
             .sql(ADD_LINK_QUERY)
             .param(url)
             .param(OffsetDateTime.now())
             .param(OffsetDateTime.now())
-            .update();
-
-        log.info("Rows added: %s".formatted(rowsAffected));
-        return rowsAffected;
+            .query(new LinkRowMapper())
+            .single();
     }
 
     @Override
-    public int remove(Long linkId) {
-        int rowsAffected = jdbcClient
+    public Optional<LinkDto> remove(Long linkId) {
+        return jdbcClient
             .sql(REMOVE_LINK_QUERY_BY_ID)
             .param(linkId)
-            .update();
-
-        log.info("Rows with id = %s removed: %s".formatted(linkId, rowsAffected));
-        return rowsAffected;
+            .query(new LinkRowMapper())
+            .optional();
     }
 
     @Override
-    public int remove(String url) {
-        int rowsAffected = jdbcClient
+    public Optional<LinkDto> remove(String url) {
+        return jdbcClient
             .sql(REMOVE_LINK_QUERY_BY_URL)
             .param(url)
-            .update();
+            .query(new LinkRowMapper())
+            .optional();
+    }
 
-        log.info("Rows with url = %s removed: %s".formatted(url, rowsAffected));
-        return rowsAffected;
+    @Override
+    public Optional<LinkDto> findById(Long linkId) {
+        return jdbcClient
+            .sql(FIND_BY_ID_QUERY)
+            .param(linkId)
+            .query(new LinkRowMapper())
+            .optional();
+    }
+
+    @Override
+    public Optional<LinkDto> findByUrl(String url) {
+        return jdbcClient
+            .sql(FIND_BY_ID_URL)
+            .param(url)
+            .query(new LinkRowMapper())
+            .optional();
+    }
+
+    @Override
+    public List<LinkDto> findAllById(Set<Long> setOfLinksId) {
+        return jdbcClient
+            .sql(FIND_ALL_BY_ID)
+            .param(setOfLinksId.toString().substring(1, setOfLinksId.toString().length() - 1))
+            .query(new LinkRowMapper())
+            .list();
     }
 
     @Override
@@ -77,10 +104,11 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
             .list();
     }
 
-    private static final class LinkRowMapper implements RowMapper<LinkDto> {
+    public static final class LinkRowMapper implements RowMapper<LinkDto> {
         @Override
         public LinkDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new LinkDto(
+                rs.getLong("id"),
                 rs.getString("url"),
                 rs.getObject("updated_at", OffsetDateTime.class),
                 rs.getObject("last_check_time", OffsetDateTime.class)

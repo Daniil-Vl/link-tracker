@@ -20,6 +20,14 @@ public interface ChatRepository {
     int remove(Long chatId);
 
     /**
+     * Checks if tg chat registered
+     *
+     * @param chatId - telegram chat id
+     * @return true if registered, otherwise false
+     */
+    boolean isExists(Long chatId);
+
+    /**
      * Retrieve all chats
      *
      * @return list of all chats
