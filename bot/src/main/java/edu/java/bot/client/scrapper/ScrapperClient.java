@@ -12,7 +12,7 @@ public interface ScrapperClient {
      * @param id - chat id
      * @return string response
      */
-    String registerChat(Integer id);
+    String registerChat(Long id);
 
     /**
      * Removes chat with id
@@ -20,7 +20,7 @@ public interface ScrapperClient {
      * @param id - chat id
      * @return string response
      */
-    String deleteChat(Integer id);
+    String deleteChat(Long id);
 
     /**
      * Get all tracked links by user with certain chat id
@@ -28,7 +28,7 @@ public interface ScrapperClient {
      * @param tgChatId - chat id
      * @return list of tracked links
      */
-    ListLinksResponse getLinks(Integer tgChatId);
+    ListLinksResponse getLinks(Long tgChatId);
 
     /**
      * Start a tracking link by certain user
@@ -37,7 +37,7 @@ public interface ScrapperClient {
      * @param link     - link to track
      * @return response with a tracked link
      */
-    LinkResponse addLink(Integer tgChatId, URI link);
+    LinkResponse addLink(Long tgChatId, URI link);
 
     /**
      * Stop a tracking link
@@ -46,5 +46,5 @@ public interface ScrapperClient {
      * @param removeLinkRequest - request body with a link to remove
      * @return response with a removed link
      */
-    LinkResponse deleteLink(Integer tgChatId, RemoveLinkRequest removeLinkRequest);
+    LinkResponse deleteLink(Long tgChatId, RemoveLinkRequest removeLinkRequest);
 }
