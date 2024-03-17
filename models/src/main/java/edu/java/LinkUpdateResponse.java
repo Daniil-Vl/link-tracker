@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-public record LinkUpdate(
+public record LinkUpdateResponse(
     @JsonProperty("id")
     @PositiveOrZero(message = "Id must be non-negative")
-    Integer id,
+    Long id,
     @JsonProperty("url")
     @NotBlank(message = "Url cannot be blank")
     String url,
@@ -18,6 +18,6 @@ public record LinkUpdate(
     String description,
     @JsonProperty("tgChatIds")
     @NotEmpty(message = "List of ids cannot be empty")
-    List<Integer> ids
+    List<Long> ids
 ) {
 }

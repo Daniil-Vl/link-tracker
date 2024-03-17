@@ -1,7 +1,7 @@
 package edu.java.client.bot;
 
-import edu.java.LinkUpdate;
+import edu.java.LinkUpdateResponse;
 
 public interface BotClient {
-    String sendLinkUpdateRequest(LinkUpdate linkUpdate);
+    String sendLinkUpdateRequest(LinkUpdateResponse linkUpdateResponse);
 }
