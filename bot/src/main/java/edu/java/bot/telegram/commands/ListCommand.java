@@ -4,8 +4,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.scrapper.ScrapperClient;
 import edu.java.bot.telegram.message.ReplyMessages;
-import edu.java.bot.telegram.persistence.ResourceDB;
-import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 import edu.java.exceptions.ApiErrorException;
 import edu.java.scrapper.LinkResponse;
 import edu.java.scrapper.ListLinksResponse;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class ListCommand implements Command {
-    private final ResourceDB resourceDB;
     private final ScrapperClient scrapperClient;
 
     @Override
@@ -49,7 +46,7 @@ public class ListCommand implements Command {
     }
 
     @Override
-    public SendMessage handle(Update update) throws UserNotFoundException {
+    public SendMessage handle(Update update) {
         long userId = update.message().chat().id();
 
         ListLinksResponse links;

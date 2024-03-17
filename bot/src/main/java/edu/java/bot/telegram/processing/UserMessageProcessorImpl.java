@@ -5,7 +5,6 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.telegram.commands.Command;
 import edu.java.bot.telegram.commands.CommandManager.CommandManager;
 import edu.java.bot.telegram.message.ReplyMessages;
-import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -23,18 +22,7 @@ public class UserMessageProcessorImpl implements UserMessageProcessor {
                 continue;
             }
 
-            try {
-                return command.handle(update);
-            } catch (UserNotFoundException e) {
-                log.warn(
-                    "Tried to execute command %s with non-existent user with id = %s"
-                        .formatted(command.command(), update.message().chat().id())
-                );
-                return new SendMessage(
-                    update.message().chat().id(),
-                    ReplyMessages.REQUIRE_SIGNING_IN.getText()
-                );
-            }
+            return command.handle(update);
         }
 
         log.info("Receive unknown command = %s".formatted(update.message().text().split(" ")[0]));

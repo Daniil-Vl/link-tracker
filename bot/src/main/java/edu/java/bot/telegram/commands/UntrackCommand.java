@@ -3,9 +3,6 @@ package edu.java.bot.telegram.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.scrapper.ScrapperClient;
-import edu.java.bot.telegram.links.linkparser.LinkParser;
-import edu.java.bot.telegram.persistence.ResourceDB;
-import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 import edu.java.exceptions.ApiErrorException;
 import edu.java.scrapper.LinkResponse;
 import edu.java.scrapper.RemoveLinkRequest;
@@ -18,8 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class UntrackCommand implements Command {
-    private final ResourceDB resourceDB;
-    private final LinkParser linkParser;
+
     private final ScrapperClient scrapperClient;
 
     @Override
@@ -39,14 +35,10 @@ public class UntrackCommand implements Command {
 
     @SuppressWarnings("ReturnCount")
     @Override
-    public SendMessage handle(Update update) throws UserNotFoundException {
+    public SendMessage handle(Update update) {
         long userId = update.message().chat().id();
         String[] tokens = update.message().text().split(" ");
 
-//        if (!resourceDB.userExists(userId)) {
-//            throw new UserNotFoundException("Cannot use /track command for unauthenticated user");
-//        }
-//
         if (tokens.length < 2) {
             log.warn("Received /untrack without arguments");
             return new SendMessage(userId, helpMessage());
@@ -71,27 +63,5 @@ public class UntrackCommand implements Command {
             userId,
             "Resource %s was removed".formatted(response.url())
         );
-
-        // TODO: remove all commented code
-
-//
-//        try {
-//            Link link = linkParser.parseLink(resourceURI);
-//            boolean wasPreviouslyTracked = resourceDB.untrack(userId, link);
-//
-//            if (!wasPreviouslyTracked) {
-//                return new SendMessage(userId, ReplyMessages.UNTRACK_NON_TRACKED.getText());
-//            }
-//
-//            log.info("Successfully remove resources = %s from the user with id = %s".formatted(resourceURI, userId));
-//
-//            return new SendMessage(userId, ReplyMessages.SUCCESSFUL_REMOVE.getText());
-//        } catch (UnsupportedResourceURL e) {
-//            log.warn("Tried to remove unsupported resource with uri - %s".formatted(tokens[1]));
-//            return new SendMessage(userId, ReplyMessages.UNSUPPORTED_RESOURCE_URI.getText());
-//        } catch (InvalidURL e) {
-//            log.warn("Tried to remove invalid uri - %s".formatted(resourceURI));
-//            return new SendMessage(userId, ReplyMessages.INVALID_URL.getText());
-//        }
     }
 }

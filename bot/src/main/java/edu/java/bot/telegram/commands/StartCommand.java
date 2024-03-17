@@ -3,7 +3,6 @@ package edu.java.bot.telegram.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.scrapper.ScrapperClient;
-import edu.java.bot.telegram.persistence.ResourceDB;
 import edu.java.exceptions.ApiErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class StartCommand implements Command {
-    private final ResourceDB resourceDB;
     private final ScrapperClient scrapperClient;
 
     @Override
@@ -51,18 +49,5 @@ public class StartCommand implements Command {
             update.message().chat().username()
         ));
         return new SendMessage(userId, response);
-
-//        if (resourceDB.userExists(userId)) {
-//            return new SendMessage(userId, ReplyMessages.USER_ALREADY_SIGNED_IN.getText());
-//        }
-//
-//        resourceDB.addUser(userId);
-//
-//        log.info("New user with id = %s and username = %s signed up".formatted(
-//            userId,
-//            update.message().chat().username()
-//        ));
-//
-//        return new SendMessage(userId, ReplyMessages.SUCCESSFUL_SIGNING_UP.getText());
     }
 }
