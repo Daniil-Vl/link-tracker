@@ -4,6 +4,7 @@ import edu.java.dto.dao.LinkDto;
 import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface LinkService {
@@ -34,4 +35,20 @@ public interface LinkService {
      * @return list of tracked links
      */
     List<LinkDto> listAll(long tgChatId);
+
+    /**
+     * Modify updateAt link's field in db
+     *
+     * @param linkId       - link to modify
+     * @param newUpdatedAt - new updatedAt value
+     */
+    void markNewUpdate(Long linkId, OffsetDateTime newUpdatedAt);
+
+    /**
+     * Return all subscribed users to a certain resource
+     *
+     * @param linkId - resource id
+     * @return list of users
+     */
+    List<Long> getAllSubscribers(Long linkId);
 }

@@ -7,6 +7,7 @@ import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;
 import edu.java.service.LinkService;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -52,5 +53,15 @@ public class LinkServiceJdbcImpl implements LinkService {
     @Override
     public List<LinkDto> listAll(long tgChatId) {
         return subscriptionRepositoryJdbc.getAllSubscriptions(tgChatId);
+    }
+
+    @Override
+    public void markNewUpdate(Long linkId, OffsetDateTime newUpdatedAt) {
+        linkRepositoryJdbc.markNewUpdate(linkId, newUpdatedAt);
+    }
+
+    @Override
+    public List<Long> getAllSubscribers(Long linkId) {
+        return subscriptionRepositoryJdbc.getAllSubscribers(linkId);
     }
 }
