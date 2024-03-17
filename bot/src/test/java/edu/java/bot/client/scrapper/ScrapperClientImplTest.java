@@ -155,7 +155,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
     void givenId_whenGetLinks_thenReturnOk() throws JsonProcessingException {
         Integer chatId = 1;
         ListLinksResponse expectedResponse = new ListLinksResponse(
-            List.of(new ListLinksResponse.LinkResponse(1, URI.create("url"))),
+            List.of(new LinkResponse(1L, URI.create("url"))),
             1
         );
 
@@ -231,7 +231,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
     void givenId_whenAddLink_ThenReturnOk() throws JsonProcessingException {
         Integer chatId = 1;
         URI url = URI.create("url");
-        LinkResponse expectedResponse = new LinkResponse(1, url);
+        LinkResponse expectedResponse = new LinkResponse(1L, url);
         AddLinkRequest addLinkRequest = new AddLinkRequest(url);
 
         server.stubFor(
@@ -284,7 +284,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
     void givenId_whenDeleteLinks_thenReturnOk() throws JsonProcessingException {
         Integer chatId = 1;
         URI url = URI.create("url");
-        LinkResponse expectedResponse = new LinkResponse(1, url);
+        LinkResponse expectedResponse = new LinkResponse(1L, url);
         RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest(url);
 
         server.stubFor(
