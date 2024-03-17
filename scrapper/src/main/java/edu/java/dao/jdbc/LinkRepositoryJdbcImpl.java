@@ -2,6 +2,7 @@ package edu.java.dao.jdbc;
 
 import edu.java.dao.LinkRepository;
 import edu.java.dto.dao.LinkDto;
+import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -109,7 +110,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
         public LinkDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new LinkDto(
                 rs.getLong("id"),
-                rs.getString("url"),
+                URI.create(rs.getString("url")),
                 rs.getObject("updated_at", OffsetDateTime.class),
                 rs.getObject("last_check_time", OffsetDateTime.class)
             );

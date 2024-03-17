@@ -1,10 +1,11 @@
 package edu.java.dto.dao;
 
+import java.net.URI;
 import java.time.OffsetDateTime;
 
 public record LinkDto(
     Long id,
-    String url,
+    URI url,
     OffsetDateTime updatedAt,
     OffsetDateTime lastCheckTime
 ) {
