@@ -22,7 +22,7 @@ public class LinkServiceJdbcImpl implements LinkService {
     @Override
     public LinkDto add(long tgChatId, URI url) throws ChatNotExistException {
         if (!tgChatServiceJdbc.isAuthenticated(tgChatId)) {
-            throw new ChatNotExistException("User not authenticated");
+            throw new ChatNotExistException();
         }
 
         Optional<LinkDto> res = linkRepositoryJdbc.findByUrl(url.toString());
@@ -35,12 +35,12 @@ public class LinkServiceJdbcImpl implements LinkService {
     @Override
     public LinkDto remove(long tgChatId, URI url) throws ChatNotExistException, LinkNotExistException {
         if (!tgChatServiceJdbc.isAuthenticated(tgChatId)) {
-            throw new ChatNotExistException("User not authenticated");
+            throw new ChatNotExistException();
         }
 
         Optional<LinkDto> res = linkRepositoryJdbc.findByUrl(url.toString());
         if (res.isEmpty()) {
-            throw new LinkNotExistException("Link not exist");
+            throw new LinkNotExistException();
         }
         LinkDto linkDto = res.get();
 

@@ -19,10 +19,14 @@ import org.springframework.stereotype.Repository;
 public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
     private static final String SUBSCRIBE_QUERY =
         "INSERT INTO subscription(chat_id, link_id) VALUES (?, ?) RETURNING *";
-    private static final String UNSUBSCRIBE_QUERY = "DELETE FROM subscription WHERE chat_id = ? AND link_id = ? RETURNING *";
-    private static final String SELECT_ALL_SUBSCRIBED_USERS = "SELECT chat_id FROM subscription WHERE link_id = ?";
+    private static final String UNSUBSCRIBE_QUERY =
+        "DELETE FROM subscription WHERE chat_id = ? AND link_id = ? RETURNING *";
+    private static final String SELECT_ALL_SUBSCRIBED_USERS =
+        "SELECT chat_id FROM subscription WHERE link_id = ?";
     private static final String SELECT_ALL_SUBSCRIPTIONS =
-        "SELECT l.id, l.url, l.updated_at, l.last_check_time from subscription s JOIN link l on l.id = s.link_id WHERE chat_id = ?";
+        "SELECT l.id, l.url, l.updated_at, l.last_check_time from subscription s "
+            + "JOIN link l on l.id = s.link_id WHERE chat_id = ?";
+
     private final JdbcClient jdbcClient;
 
     @Override

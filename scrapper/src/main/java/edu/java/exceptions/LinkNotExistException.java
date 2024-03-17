@@ -1,10 +1,10 @@
 package edu.java.exceptions;
 
 public class LinkNotExistException extends Exception {
-    private static final String defaultMessage = "Link not exist";
+    private static final String DEFAULT_MESSAGE = "Link not exist";
 
     public LinkNotExistException() {
-        super(defaultMessage);
+        super(DEFAULT_MESSAGE);
     }
 
     public LinkNotExistException(String message) {
