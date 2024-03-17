@@ -7,7 +7,6 @@ import edu.java.dto.github.GithubEventResponse;
 import edu.java.resource.ResourceManager;
 import edu.java.service.LinkService;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
@@ -29,17 +28,8 @@ public class GithubResourceManager implements ResourceManager {
         URI url = linkDto.url();
         String[] pathTokens = url.getPath().split("/");
 
-        String author = null;
-        String repository = null;
-
-        try {
-            author = pathTokens[1];
-            repository = pathTokens[2];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(url.toString());
-            System.out.println(Arrays.toString(pathTokens));
-            return null;
-        }
+        String author = pathTokens[1];
+        String repository = pathTokens[2];
 
         List<GithubEventResponse> latestUpdates = githubClient.getLatestUpdates(
             author,
