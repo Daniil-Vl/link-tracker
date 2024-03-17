@@ -45,6 +45,15 @@ public interface LinkService {
     void markNewUpdate(Long linkId, OffsetDateTime newUpdatedAt);
 
     /**
+     * Updates last_check_time field in db
+     *
+     * @param linkId           - link to update
+     * @param newLastCheckTime - new last_check_time value
+     * @return number of affected rows
+     */
+    void markNewCheck(Long linkId, OffsetDateTime newLastCheckTime);
+
+    /**
      * Return all subscribed users to a certain resource
      *
      * @param linkId - resource id

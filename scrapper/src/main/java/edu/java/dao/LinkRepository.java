@@ -83,4 +83,12 @@ public interface LinkRepository {
      * @return number of affected rows
      */
     int markNewUpdate(Long linkId, OffsetDateTime newUpdatedAt);
+
+    /**
+     * Updates last_check_time field in db
+     * @param linkId - link to update
+     * @param newLastCheckTime - new last_check_time value
+     * @return number of affected rows
+     */
+    int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime);
 }

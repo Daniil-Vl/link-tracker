@@ -9,6 +9,7 @@ import edu.java.dto.dao.LinkDto;
 import edu.java.linkparsing.LinkDispatcher;
 import edu.java.service.LinkService;
 import edu.java.service.LinkUpdater;
+import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,6 +32,7 @@ public class LinkUpdaterJdbcImpl implements LinkUpdater {
         int numberOfProcessedUpdates = 0;
 
         for (LinkDto linkDto : linkDtoList) {
+            linkService.markNewCheck(linkDto.id(), OffsetDateTime.now());
             List<LinkUpdate> updates = linkDispatcher.getUpdates(linkDto);
 
             if (updates.isEmpty()) {

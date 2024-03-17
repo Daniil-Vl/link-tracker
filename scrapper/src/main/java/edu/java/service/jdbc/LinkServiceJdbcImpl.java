@@ -61,6 +61,11 @@ public class LinkServiceJdbcImpl implements LinkService {
     }
 
     @Override
+    public void markNewCheck(Long linkId, OffsetDateTime newLastCheckTime) {
+        linkRepositoryJdbc.markNewCheck(linkId, newLastCheckTime);
+    }
+
+    @Override
     public List<Long> getAllSubscribers(Long linkId) {
         return subscriptionRepositoryJdbc.getAllSubscribers(linkId);
     }

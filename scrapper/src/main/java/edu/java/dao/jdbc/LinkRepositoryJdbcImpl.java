@@ -31,6 +31,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     private static final String FIND_ALL_BY_ID = "SELECT * FROM link WHERE id IN (?)";
     private static final String MARK_NEW_UPDATE_QUERY =
         "UPDATE link SET updated_at = ?, last_check_time = ? WHERE id = ?";
+    private static final String MARK_NEW_CHECK_TIME = "UPDATE link SET last_check_time = ? WHERE id = ?";
 
     private final JdbcClient jdbcClient;
 
@@ -113,6 +114,15 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
             .sql(MARK_NEW_UPDATE_QUERY)
             .param(newUpdatedAt)
             .param(newUpdatedAt)
+            .param(linkId)
+            .update();
+    }
+
+    @Override
+    public int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime) {
+        return jdbcClient
+            .sql(MARK_NEW_CHECK_TIME)
+            .param(newLastCheckTime)
             .param(linkId)
             .update();
     }
