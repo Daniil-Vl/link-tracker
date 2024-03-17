@@ -3,8 +3,6 @@ package edu.java.scrapper;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import java.net.URI;
 import java.util.List;
 
 public record ListLinksResponse(
@@ -15,11 +13,4 @@ public record ListLinksResponse(
     @Positive(message = "Size must be positive")
     Integer size
 ) {
-    public record LinkResponse(
-        @JsonProperty("id")
-        @PositiveOrZero(message = "Id must be non-negative")
-        Integer id,
-        @JsonProperty("url")
-        URI url) {
-    }
 }
