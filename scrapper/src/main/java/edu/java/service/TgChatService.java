@@ -1,5 +1,7 @@
 package edu.java.service;
 
+import edu.java.exceptions.ChatNotExistException;
+
 public interface TgChatService {
     /**
      * Register user
@@ -13,7 +15,7 @@ public interface TgChatService {
      *
      * @param tgChatId - user's telegram chat id
      */
-    void unregister(Long tgChatId);
+    void unregister(Long tgChatId) throws ChatNotExistException;
 
     /**
      * Checks if user authenticated

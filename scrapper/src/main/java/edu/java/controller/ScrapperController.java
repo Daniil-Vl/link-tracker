@@ -1,6 +1,8 @@
 package edu.java.controller;
 
 import edu.java.ApiErrorResponse;
+import edu.java.exceptions.ChatNotExistException;
+import edu.java.exceptions.LinkNotExistException;
 import edu.java.scrapper.AddLinkRequest;
 import edu.java.scrapper.LinkResponse;
 import edu.java.scrapper.ListLinksResponse;
@@ -33,7 +35,7 @@ public interface ScrapperController {
                      ))
     })
     @PostMapping("/tg-chat/{id}")
-    String registerChat(@PathVariable @PositiveOrZero Integer id);
+    String registerChat(@PathVariable @PositiveOrZero Long id);
 
     @Operation(summary = "Удалить чат")
     @ApiResponses(value = {
@@ -52,7 +54,7 @@ public interface ScrapperController {
                      ))
     })
     @DeleteMapping("/tg-chat/{id}")
-    String deleteChat(@PathVariable @PositiveOrZero Integer id);
+    String deleteChat(@PathVariable @PositiveOrZero Long id) throws ChatNotExistException;
 
     @Operation(summary = "Получить все отслеживаемые ссылки")
     @ApiResponses(value = {
@@ -70,7 +72,7 @@ public interface ScrapperController {
                      ))
     })
     @GetMapping("/links")
-    ListLinksResponse getLinks(@RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Integer tgChatId);
+    ListLinksResponse getLinks(@RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Long tgChatId);
 
     @Operation(summary = "Добавить отслеживание ссылки")
     @ApiResponses(value = {
@@ -90,7 +92,7 @@ public interface ScrapperController {
     })
     @PostMapping("/links")
     LinkResponse addLink(
-        @RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Integer tgChatId,
+        @RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Long tgChatId,
         @RequestBody AddLinkRequest addLinkRequest
     );
 
@@ -117,7 +119,7 @@ public interface ScrapperController {
     })
     @DeleteMapping("/links")
     LinkResponse deleteLinks(
-        @RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Integer tgChatId,
+        @RequestHeader(name = "Tg-Chat-Id") @PositiveOrZero Long tgChatId,
         @RequestBody RemoveLinkRequest removeLinkRequest
-    );
+    ) throws ChatNotExistException, LinkNotExistException;
 }

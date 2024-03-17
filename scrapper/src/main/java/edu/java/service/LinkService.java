@@ -9,12 +9,13 @@ import java.util.List;
 public interface LinkService {
     /**
      * Add url tracking for user with given chat id
+     * If the user is not registered, then register him
      *
      * @param tgChatId - user's telegram chat id
      * @param url      - url to track
      * @return info about a tracked link
      */
-    LinkDto add(long tgChatId, URI url) throws ChatNotExistException;
+    LinkDto add(long tgChatId, URI url);
 
     /**
      * Stop tracking link

@@ -1,6 +1,8 @@
 package edu.java.exceptionhandler;
 
 import edu.java.ApiErrorResponse;
+import edu.java.exceptions.ChatNotExistException;
+import edu.java.exceptions.LinkNotExistException;
 import java.util.Arrays;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -19,10 +21,38 @@ public class ScrapperControllerExceptionHandler {
 
         return new ApiErrorResponse(
             "Invalid arguments in path or header",
-            "400",
+            String.valueOf(HttpStatus.BAD_REQUEST.value()),
             "HandlerMethodValidationException",
             Arrays.toString(exc.getDetailMessageArguments()),
             Arrays.stream(exc.getStackTrace()).map(StackTraceElement::toString).toList()
+        );
+    }
+
+    @ExceptionHandler(value = {ChatNotExistException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ApiErrorResponse chatNotFound(ChatNotExistException e) {
+        log.warn("Catch ChatNotExistException");
+
+        return new ApiErrorResponse(
+            "Chat doesn't exist",
+            String.valueOf(HttpStatus.NOT_FOUND.value()),
+            "ChatNotExistException",
+            e.getMessage(),
+            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toList()
+        );
+    }
+
+    @ExceptionHandler(value = {LinkNotExistException.class})
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ApiErrorResponse linkNotFound(LinkNotExistException e) {
+        log.warn("Catch LinkNotExistException");
+
+        return new ApiErrorResponse(
+            "Link doesn't exist",
+            String.valueOf(HttpStatus.NOT_FOUND.value()),
+            "LinkNotExistException",
+            e.getMessage(),
+            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).toList()
         );
     }
 }

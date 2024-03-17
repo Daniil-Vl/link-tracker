@@ -20,9 +20,9 @@ public class LinkServiceJdbcImpl implements LinkService {
     private final TgChatServiceJdbcImpl tgChatServiceJdbc;
 
     @Override
-    public LinkDto add(long tgChatId, URI url) throws ChatNotExistException {
+    public LinkDto add(long tgChatId, URI url) {
         if (!tgChatServiceJdbc.isAuthenticated(tgChatId)) {
-            throw new ChatNotExistException();
+            tgChatServiceJdbc.register(tgChatId);
         }
 
         Optional<LinkDto> res = linkRepositoryJdbc.findByUrl(url.toString());
@@ -40,7 +40,7 @@ public class LinkServiceJdbcImpl implements LinkService {
 
         Optional<LinkDto> res = linkRepositoryJdbc.findByUrl(url.toString());
         if (res.isEmpty()) {
-            throw new LinkNotExistException();
+            throw new LinkNotExistException("Cannot remove non-existent link");
         }
         LinkDto linkDto = res.get();
 

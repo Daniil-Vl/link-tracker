@@ -1,6 +1,7 @@
 package edu.java.service.jdbc;
 
 import edu.java.dao.jdbc.ChatRepositoryJdbcImpl;
+import edu.java.exceptions.ChatNotExistException;
 import edu.java.service.TgChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,8 +24,11 @@ public class TgChatServiceJdbcImpl implements TgChatService {
     }
 
     @Override
-    public void unregister(Long tgChatId) {
-        chatRepositoryJdbc.remove(tgChatId);
+    public void unregister(Long tgChatId) throws ChatNotExistException {
+        int rowsAffected = chatRepositoryJdbc.remove(tgChatId);
+        if (rowsAffected == 0) {
+            throw new ChatNotExistException("Cannot remove non-existent chat");
+        }
         log.info("User with id = %s has been unregistered".formatted(tgChatId));
     }
 
