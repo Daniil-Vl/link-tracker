@@ -8,6 +8,7 @@ import edu.java.resource.ResourceManager;
 import edu.java.service.LinkService;
 import java.net.URI;
 import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -50,10 +51,29 @@ public class GithubResourceManager implements ResourceManager {
             update.updatedAt()
         );
 
+        GithubEventType type = null;
+        for (GithubEventType githubEventType : GithubEventType.values()) {
+            if (githubEventType.type.equals(update.type())) {
+                type = githubEventType;
+                break;
+            }
+        }
+
         return new LinkUpdate(
             resourceId,
             url.toString(),
-            "New Update"
+            type != null ? type.getDescriptionMessage() : "New Update"
         );
+    }
+
+    @RequiredArgsConstructor
+    @Getter
+    private enum GithubEventType {
+        PUSH_EVENT("PushEvent", "New commit"),
+        ISSUE_NEW_COMMENT("IssueCommentEvent", "New comment in issue"),
+        PULL_REQUEST_REVIEW_EVENT("PullRequestReviewEvent", "New pull request review");
+
+        private final String type;
+        private final String descriptionMessage;
     }
 }
