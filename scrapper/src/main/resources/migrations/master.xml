@@ -9,6 +9,6 @@
 
     <include file="sql/init_chat_table.sql" relativeToChangelogFile="true"/>
     <include file="sql/init_link_table.sql" relativeToChangelogFile="true"/>
-    <include file="sql/init_chats_links_table.sql" relativeToChangelogFile="true"/>
+    <include file="sql/init_subscription_table.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
