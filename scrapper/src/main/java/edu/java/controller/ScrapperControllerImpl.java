@@ -39,9 +39,7 @@ public class ScrapperControllerImpl implements ScrapperController {
 
         List<LinkResponse> linkResponses = linkDtoList
             .stream()
-            .map(linkDto -> {
-                return new LinkResponse(linkDto.id(), linkDto.url());
-            })
+            .map(linkDto -> new LinkResponse(linkDto.id(), linkDto.url()))
             .toList();
 
         return new ListLinksResponse(
