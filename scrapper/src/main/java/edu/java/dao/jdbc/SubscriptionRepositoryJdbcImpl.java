@@ -50,7 +50,7 @@ public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
     }
 
     @Override
-    public List<Long> getAllSubscribedUsers(Long linkId) {
+    public List<Long> getAllSubscribers(Long linkId) {
         return jdbcClient
             .sql(SELECT_ALL_SUBSCRIBED_USERS)
             .param(linkId)

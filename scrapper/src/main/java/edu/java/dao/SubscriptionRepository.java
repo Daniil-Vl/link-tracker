@@ -30,7 +30,7 @@ public interface SubscriptionRepository {
      * @param linkId - resource id
      * @return list of users
      */
-    List<Long> getAllSubscribedUsers(Long linkId);
+    List<Long> getAllSubscribers(Long linkId);
 
     /**
      * Return all resources that the user is tracking

@@ -2,6 +2,7 @@ package edu.java.dao;
 
 import edu.java.dto.dao.LinkDto;
 import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -52,7 +53,7 @@ public interface LinkRepository {
     Optional<LinkDto> findByUrl(String url);
 
     /**
-     * Return all links having id in given set
+     * Return all links having id in a given list
      *
      * @param setOfLinksId - set of links id
      * @return list of links
@@ -73,4 +74,13 @@ public interface LinkRepository {
      * @return list of long-standing links
      */
     List<LinkDto> findAll(Duration interval);
+
+    /**
+     * Modify updateAt link's field in db
+     *
+     * @param linkId       - link to modify
+     * @param newUpdatedAt - new updatedAt value
+     * @return number of affected rows
+     */
+    int markNewUpdate(Long linkId, OffsetDateTime newUpdatedAt);
 }
