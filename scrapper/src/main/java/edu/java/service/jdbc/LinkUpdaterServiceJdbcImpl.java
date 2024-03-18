@@ -7,7 +7,7 @@ import edu.java.dao.jdbc.LinkRepositoryJdbcImpl;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.service.LinkService;
-import edu.java.service.LinkUpdater;
+import edu.java.service.LinkUpdaterService;
 import edu.java.service.linkupdatesearching.SearchersManagerService;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class LinkUpdaterJdbcImpl implements LinkUpdater {
+public class LinkUpdaterServiceJdbcImpl implements LinkUpdaterService {
     private final LinkService linkService;
     private final ApplicationConfig.Scheduler scheduler;
     private final LinkRepositoryJdbcImpl linkRepositoryJdbc;
