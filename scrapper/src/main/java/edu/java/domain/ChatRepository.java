@@ -1,4 +1,4 @@
-package edu.java.dao;
+package edu.java.domain;
 
 import java.util.List;
 

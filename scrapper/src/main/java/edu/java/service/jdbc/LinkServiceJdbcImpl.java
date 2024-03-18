@@ -1,7 +1,7 @@
 package edu.java.service.jdbc;
 
-import edu.java.dao.jdbc.LinkRepositoryJdbcImpl;
-import edu.java.dao.jdbc.SubscriptionRepositoryJdbcImpl;
+import edu.java.domain.jdbc.LinkRepositoryJdbcImpl;
+import edu.java.domain.jdbc.SubscriptionRepositoryJdbcImpl;
 import edu.java.dto.dao.LinkDto;
 import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;

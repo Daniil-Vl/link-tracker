@@ -1,6 +1,6 @@
-package edu.java.dao.jdbc;
+package edu.java.domain.jdbc;
 
-import edu.java.dao.SubscriptionRepository;
+import edu.java.domain.SubscriptionRepository;
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.dao.SubscriptionDto;
 import java.sql.ResultSet;

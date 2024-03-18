@@ -1,6 +1,6 @@
-package edu.java.dao.jdbc;
+package edu.java.domain.jdbc;
 
-import edu.java.dao.ChatRepository;
+import edu.java.domain.ChatRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

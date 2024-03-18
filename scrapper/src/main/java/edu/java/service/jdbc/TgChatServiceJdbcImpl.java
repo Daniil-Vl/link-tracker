@@ -1,6 +1,6 @@
 package edu.java.service.jdbc;
 
-import edu.java.dao.jdbc.ChatRepositoryJdbcImpl;
+import edu.java.domain.jdbc.ChatRepositoryJdbcImpl;
 import edu.java.exceptions.ChatNotExistException;
 import edu.java.service.TgChatService;
 import lombok.RequiredArgsConstructor;

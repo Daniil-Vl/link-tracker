@@ -1,4 +1,4 @@
-package edu.java.dao;
+package edu.java.domain;
 
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.dao.SubscriptionDto;

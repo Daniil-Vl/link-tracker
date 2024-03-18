@@ -1,6 +1,6 @@
-package edu.java.dao.jdbc;
+package edu.java.domain.jdbc;
 
-import edu.java.dao.LinkRepository;
+import edu.java.domain.LinkRepository;
 import edu.java.dto.dao.LinkDto;
 import java.net.URI;
 import java.sql.ResultSet;

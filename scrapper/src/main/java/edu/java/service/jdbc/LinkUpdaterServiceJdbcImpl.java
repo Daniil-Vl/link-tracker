@@ -3,7 +3,7 @@ package edu.java.service.jdbc;
 import edu.java.LinkUpdateResponse;
 import edu.java.client.bot.BotClient;
 import edu.java.configuration.ApplicationConfig;
-import edu.java.dao.jdbc.LinkRepositoryJdbcImpl;
+import edu.java.domain.jdbc.LinkRepositoryJdbcImpl;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.service.LinkService;
