@@ -20,7 +20,7 @@ public class LinkUpdateSearchingConfiguration {
     private final LinkService linkService;
 
     @Bean
-    public List<LinkUpdateSearcher> resourceManagerList() {
+    public List<LinkUpdateSearcher> linkUpdaterSearcherList() {
         return List.of(
             new GithubLinkUpdateSearcher(githubClient, linkService),
             new StackOverFlowLinkUpdateSearcher(stackoverflowClient, linkService)

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @RequiredArgsConstructor
 @Configuration
-public class ClientConfiguration {
+public class ScrapperClientConfiguration {
     private final ApplicationConfig applicationConfig;
 
     @Bean

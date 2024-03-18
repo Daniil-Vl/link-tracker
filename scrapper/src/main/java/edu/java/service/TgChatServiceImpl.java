@@ -1,23 +1,20 @@
-package edu.java.service.jdbc;
+package edu.java.service;
 
-import edu.java.domain.jdbc.ChatRepositoryJdbcImpl;
+import edu.java.domain.ChatRepository;
 import edu.java.exceptions.ChatNotExistException;
-import edu.java.service.TgChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 @Log4j2
-public class TgChatServiceJdbcImpl implements TgChatService {
-    private final ChatRepositoryJdbcImpl chatRepositoryJdbc;
+public class TgChatServiceImpl implements TgChatService {
+    private final ChatRepository chatRepository;
 
     @Override
     public void register(Long tgChatId) {
         try {
-            chatRepositoryJdbc.add(tgChatId);
+            chatRepository.add(tgChatId);
         } catch (DuplicateKeyException e) {
             log.warn("Tried to create already existing user with id = %s".formatted(tgChatId));
         }
@@ -25,7 +22,7 @@ public class TgChatServiceJdbcImpl implements TgChatService {
 
     @Override
     public void unregister(Long tgChatId) throws ChatNotExistException {
-        int rowsAffected = chatRepositoryJdbc.remove(tgChatId);
+        int rowsAffected = chatRepository.remove(tgChatId);
         if (rowsAffected == 0) {
             throw new ChatNotExistException("Cannot remove non-existent chat");
         }
@@ -34,6 +31,6 @@ public class TgChatServiceJdbcImpl implements TgChatService {
 
     @Override
     public boolean isAuthenticated(Long tgChatId) {
-        return chatRepositoryJdbc.isExists(tgChatId);
+        return chatRepository.isExists(tgChatId);
     }
 }
