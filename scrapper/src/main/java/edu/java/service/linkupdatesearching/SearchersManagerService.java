@@ -1,10 +1,10 @@
-package edu.java.linkparsing;
+package edu.java.service.linkupdatesearching;
 
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import java.util.List;
 
-public interface LinkDispatcher {
+public interface SearchersManagerService {
     /**
      * Get updates of an abstract link
      *

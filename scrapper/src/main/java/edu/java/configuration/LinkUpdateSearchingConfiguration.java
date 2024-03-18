@@ -2,10 +2,10 @@ package edu.java.configuration;
 
 import edu.java.client.github.GithubClient;
 import edu.java.client.stackoverflow.StackoverflowClient;
-import edu.java.resource.ResourceManager;
-import edu.java.resource.github.GithubResourceManager;
-import edu.java.resource.stackoverflow.StackOverFlowResourceManager;
 import edu.java.service.LinkService;
+import edu.java.service.linkupdatesearching.searchers.LinkUpdateSearcher;
+import edu.java.service.linkupdatesearching.searchers.github.GithubLinkUpdateSearcher;
+import edu.java.service.linkupdatesearching.searchers.stackoverflow.StackOverFlowLinkUpdateSearcher;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,17 +13,17 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class ResourceManagerConfiguration {
+public class LinkUpdateSearchingConfiguration {
 
     private final GithubClient githubClient;
     private final StackoverflowClient stackoverflowClient;
     private final LinkService linkService;
 
     @Bean
-    public List<ResourceManager> resourceManagerList() {
+    public List<LinkUpdateSearcher> resourceManagerList() {
         return List.of(
-            new GithubResourceManager(githubClient, linkService),
-            new StackOverFlowResourceManager(stackoverflowClient, linkService)
+            new GithubLinkUpdateSearcher(githubClient, linkService),
+            new StackOverFlowLinkUpdateSearcher(stackoverflowClient, linkService)
         );
     }
 }

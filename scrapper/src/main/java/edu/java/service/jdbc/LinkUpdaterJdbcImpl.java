@@ -6,9 +6,9 @@ import edu.java.configuration.ApplicationConfig;
 import edu.java.dao.jdbc.LinkRepositoryJdbcImpl;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
-import edu.java.linkparsing.LinkDispatcher;
 import edu.java.service.LinkService;
 import edu.java.service.LinkUpdater;
+import edu.java.service.linkupdatesearching.SearchersManagerService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ public class LinkUpdaterJdbcImpl implements LinkUpdater {
     private final ApplicationConfig.Scheduler scheduler;
     private final LinkRepositoryJdbcImpl linkRepositoryJdbc;
     private final BotClient botClient;
-    private final LinkDispatcher linkDispatcher;
+    private final SearchersManagerService searchersManagerService;
 
     @Override
     public int update() {
@@ -33,7 +33,7 @@ public class LinkUpdaterJdbcImpl implements LinkUpdater {
 
         for (LinkDto linkDto : linkDtoList) {
             linkService.markNewCheck(linkDto.id(), OffsetDateTime.now());
-            List<LinkUpdate> updates = linkDispatcher.getUpdates(linkDto);
+            List<LinkUpdate> updates = searchersManagerService.getUpdates(linkDto);
 
             if (updates.isEmpty()) {
                 continue;

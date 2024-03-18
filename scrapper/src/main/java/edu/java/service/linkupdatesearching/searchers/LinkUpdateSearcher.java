@@ -1,4 +1,4 @@
-package edu.java.resource;
+package edu.java.service.linkupdatesearching.searchers;
 
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * This entity can get updates for a certain link type (based on implementation of this interface)
  */
-public interface ResourceManager {
+public interface LinkUpdateSearcher {
     String host();
 
     /**

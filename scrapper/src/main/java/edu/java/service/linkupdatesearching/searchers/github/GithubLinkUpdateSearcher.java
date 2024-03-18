@@ -1,18 +1,18 @@
-package edu.java.resource.github;
+package edu.java.service.linkupdatesearching.searchers.github;
 
 import edu.java.client.github.GithubClient;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.github.GithubEventResponse;
-import edu.java.resource.ResourceManager;
 import edu.java.service.LinkService;
+import edu.java.service.linkupdatesearching.searchers.LinkUpdateSearcher;
 import java.net.URI;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class GithubResourceManager implements ResourceManager {
+public class GithubLinkUpdateSearcher implements LinkUpdateSearcher {
     private static final String HOST_NAME = "github.com";
     private static final Integer NUMBER_OF_UPDATES = 1;
 

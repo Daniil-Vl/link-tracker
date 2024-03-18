@@ -1,17 +1,17 @@
-package edu.java.resource.stackoverflow;
+package edu.java.service.linkupdatesearching.searchers.stackoverflow;
 
 import edu.java.client.stackoverflow.StackoverflowClient;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
-import edu.java.resource.ResourceManager;
 import edu.java.service.LinkService;
+import edu.java.service.linkupdatesearching.searchers.LinkUpdateSearcher;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class StackOverFlowResourceManager implements ResourceManager {
+public class StackOverFlowLinkUpdateSearcher implements LinkUpdateSearcher {
     private static final String HOST_NAME = "stackoverflow.com";
     private final StackoverflowClient stackoverflowClient;
     private final LinkService linkService;
