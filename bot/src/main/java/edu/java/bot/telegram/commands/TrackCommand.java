@@ -50,7 +50,6 @@ public class TrackCommand implements Command {
         try {
             response = scrapperClient.addLink(
                 userId,
-//                URI.create(resourceURI)
                 new URI(resourceURI)
             );
         } catch (ApiErrorException e) {

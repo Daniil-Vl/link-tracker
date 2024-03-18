@@ -4,7 +4,6 @@ import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 import edu.java.bot.client.scrapper.ScrapperClient;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -28,10 +27,6 @@ abstract class AbstractCommandTest {
     void setUp() {
         initMockedUpdate(1);
         initCommand();
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     abstract void initCommand();
