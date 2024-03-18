@@ -9,12 +9,17 @@ import org.jooq.meta.jaxb.Property;
 import org.jooq.meta.jaxb.Target;
 
 public class JooqCodegen {
+    private JooqCodegen() {
+    }
+
+    @SuppressWarnings("UncommentedMain")
     public static void main(String[] args) throws Exception {
+        String migrationPath = ".\\scrapper\\src\\main\\resources\\migrations";
         Database database = new Database()
             .withName("org.jooq.meta.extensions.liquibase.LiquibaseDatabase")
             .withProperties(
-                new Property().withKey("rootPath").withValue(".\\scrapper\\src\\main\\resources\\migrations"),
-                new Property().withKey("searchPath").withValue(".\\scrapper\\src\\main\\resources\\migrations"),
+                new Property().withKey("rootPath").withValue(migrationPath),
+                new Property().withKey("searchPath").withValue(migrationPath),
                 new Property().withKey("scripts").withValue("master.xml")
             );
 
