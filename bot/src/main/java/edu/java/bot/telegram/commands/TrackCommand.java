@@ -3,9 +3,11 @@ package edu.java.bot.telegram.commands;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.client.scrapper.ScrapperClient;
+import edu.java.bot.telegram.message.ReplyMessages;
 import edu.java.exceptions.ApiErrorException;
 import edu.java.scrapper.LinkResponse;
 import java.net.URI;
+import java.net.URISyntaxException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -48,7 +50,8 @@ public class TrackCommand implements Command {
         try {
             response = scrapperClient.addLink(
                 userId,
-                URI.create(resourceURI)
+//                URI.create(resourceURI)
+                new URI(resourceURI)
             );
         } catch (ApiErrorException e) {
             log.warn("Catch ApiErrorException");
@@ -56,6 +59,9 @@ public class TrackCommand implements Command {
                 userId,
                 e.getMessage()
             );
+        } catch (URISyntaxException e) {
+            log.warn("Bot received invalid link = %s on track command".formatted(resourceURI));
+            return new SendMessage(userId, ReplyMessages.INVALID_URL.getText());
         }
 
         return new SendMessage(

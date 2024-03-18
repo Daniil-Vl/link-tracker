@@ -35,7 +35,7 @@ public class ListCommand implements Command {
 
     private String buildListMessage(List<LinkResponse> trackedResources) {
         StringBuilder replyMessageBuilder = new StringBuilder();
-        replyMessageBuilder.append("List of your tracked resources: \n");
+        replyMessageBuilder.append("List of your tracked resources:\n");
 
         for (int ind = 0; ind < trackedResources.size(); ind++) {
             LinkResponse linkResponse = trackedResources.get(ind);
