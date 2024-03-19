@@ -1,7 +1,7 @@
 package edu.java.domain.jooq;
 
 import edu.java.domain.ChatRepository;
-import edu.java.scrapper.domain.jooq.tables.Chat;
+import edu.java.domain.jooq.generated.tables.Chat;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

@@ -2,8 +2,8 @@ package edu.java.domain.jooq;
 
 import edu.java.domain.LinkRepository;
 import edu.java.dto.dao.LinkDto;
-import edu.java.scrapper.domain.jooq.tables.Link;
-import edu.java.scrapper.domain.jooq.tables.records.LinkRecord;
+import edu.java.domain.jooq.generated.tables.Link;
+import edu.java.domain.jooq.generated.tables.records.LinkRecord;
 import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
