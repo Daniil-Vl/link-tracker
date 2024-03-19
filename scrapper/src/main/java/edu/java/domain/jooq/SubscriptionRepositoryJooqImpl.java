@@ -1,11 +1,11 @@
 package edu.java.domain.jooq;
 
 import edu.java.domain.SubscriptionRepository;
-import edu.java.dto.dao.LinkDto;
-import edu.java.dto.dao.SubscriptionDto;
 import edu.java.domain.jooq.generated.tables.Link;
 import edu.java.domain.jooq.generated.tables.Subscription;
 import edu.java.domain.jooq.generated.tables.records.SubscriptionRecord;
+import edu.java.dto.dao.LinkDto;
+import edu.java.dto.dao.SubscriptionDto;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
