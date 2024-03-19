@@ -3,7 +3,7 @@ package edu.java.client.bot;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.ApiErrorResponse;
-import edu.java.LinkUpdateResponse;
+import edu.java.LinkUpdateRequest;
 import edu.java.client.AbstractClientServerTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenValidLinkUpdate_whenSendRequest_thenStatusOk() {
-        LinkUpdateResponse requestBody = new LinkUpdateResponse(
+        LinkUpdateRequest requestBody = new LinkUpdateRequest(
             1L,
             "url",
             "description",
@@ -45,7 +45,7 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidLinkUpdate_whenSendRequest_thenThrowIllegalArgumentException() throws JsonProcessingException {
-        LinkUpdateResponse requestBody = new LinkUpdateResponse(
+        LinkUpdateRequest requestBody = new LinkUpdateRequest(
             -1L,
             "url",
             "description",

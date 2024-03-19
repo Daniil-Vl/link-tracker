@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 
-public record LinkUpdateResponse(
+public record LinkUpdateRequest(
     @JsonProperty("id")
     @PositiveOrZero(message = "Id must be non-negative")
     Long id,

@@ -1,6 +1,6 @@
 package edu.java.service;
 
-import edu.java.LinkUpdateResponse;
+import edu.java.LinkUpdateRequest;
 import edu.java.client.bot.BotClient;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.domain.LinkRepository;
@@ -38,7 +38,7 @@ public class LinkUpdaterServiceImpl implements LinkUpdaterService {
             for (LinkUpdate update : updates) {
                 numberOfProcessedUpdates += 1;
                 botClient.sendLinkUpdateRequest(
-                    new LinkUpdateResponse(
+                    new LinkUpdateRequest(
                         update.id(),
                         update.url(),
                         update.description(),

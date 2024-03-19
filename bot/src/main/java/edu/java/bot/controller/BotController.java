@@ -1,7 +1,7 @@
 package edu.java.bot.controller;
 
 import edu.java.ApiErrorResponse;
-import edu.java.LinkUpdateResponse;
+import edu.java.LinkUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,5 +29,5 @@ public interface BotController {
         )
     })
     @PostMapping("/updates")
-    String sendUpdate(@RequestBody LinkUpdateResponse linkUpdateResponse);
+    String sendUpdate(@RequestBody LinkUpdateRequest linkUpdateRequest);
 }

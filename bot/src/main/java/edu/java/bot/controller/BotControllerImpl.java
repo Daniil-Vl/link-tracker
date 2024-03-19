@@ -1,6 +1,6 @@
 package edu.java.bot.controller;
 
-import edu.java.LinkUpdateResponse;
+import edu.java.LinkUpdateRequest;
 import edu.java.bot.service.LinkUpdateHandler;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +14,8 @@ public class BotControllerImpl implements BotController {
     private final LinkUpdateHandler linkUpdateHandler;
 
     @Override
-    public String sendUpdate(@Valid LinkUpdateResponse linkUpdateResponse) {
-        linkUpdateHandler.processLinkUpdate(linkUpdateResponse);
+    public String sendUpdate(@Valid LinkUpdateRequest linkUpdateRequest) {
+        linkUpdateHandler.processLinkUpdate(linkUpdateRequest);
         return "Update processed";
     }
 }
