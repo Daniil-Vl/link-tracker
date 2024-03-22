@@ -1,30 +1,18 @@
 package edu.java.scrapper;
 
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import liquibase.Contexts;
-import liquibase.LabelExpression;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.DirectoryResourceAccessor;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
+@SpringBootTest
 public abstract class IntegrationTest {
     protected static PostgreSQLContainer<?> POSTGRES;
-    protected static JdbcTemplate jdbcTemplate;
 
     static {
         POSTGRES = new PostgreSQLContainer<>("postgres:15")
@@ -32,41 +20,40 @@ public abstract class IntegrationTest {
             .withUsername("postgres")
             .withPassword("postgres");
         POSTGRES.start();
-
-        runMigrations(POSTGRES);
-
-        jdbcTemplate = new JdbcTemplate(
-            DataSourceBuilder.create()
-                .url(POSTGRES.getJdbcUrl())
-                .username(POSTGRES.getUsername())
-                .password(POSTGRES.getPassword())
-                .build()
-        );
     }
 
-    private static void runMigrations(JdbcDatabaseContainer<?> c) {
-        try (Connection connection = DriverManager.getConnection(c.getJdbcUrl(), c.getUsername(), c.getPassword())) {
-
-            Database database = DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(connection));
-
-            Path changeLogFilePath = Path.of("src/main/resources/migrations");
-
-            Liquibase liquibase =
-                new Liquibase("master.xml", new DirectoryResourceAccessor(changeLogFilePath), database);
-
-            liquibase.update(new Contexts(), new LabelExpression());
-
-        } catch (SQLException | FileNotFoundException | LiquibaseException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-    }
+    @Autowired
+    private JdbcClient jdbcClient;
 
     @DynamicPropertySource
     static void jdbcProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
         registry.add("spring.datasource.username", POSTGRES::getUsername);
         registry.add("spring.datasource.password", POSTGRES::getPassword);
+    }
+
+    @DynamicPropertySource
+    static void liquibaseProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.liquibase.change-log", () -> "classpath:migrations/master.xml");
+    }
+
+    @DynamicPropertySource
+    static void schedulerProperties(DynamicPropertyRegistry registry) {
+        registry.add("app.scheduler.enable", () -> false);
+    }
+
+    @BeforeEach
+    void clearDB() {
+        jdbcClient
+            .sql("DELETE FROM subscription")
+            .update();
+
+        jdbcClient
+            .sql("DELETE FROM chat")
+            .update();
+
+        jdbcClient
+            .sql("DELETE FROM link")
+            .update();
     }
 }

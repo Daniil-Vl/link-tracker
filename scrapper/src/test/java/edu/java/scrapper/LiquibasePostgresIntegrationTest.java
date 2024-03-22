@@ -3,9 +3,14 @@ package edu.java.scrapper;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiquibasePostgresIntegrationTest extends IntegrationTest {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void testLinkTable() {
