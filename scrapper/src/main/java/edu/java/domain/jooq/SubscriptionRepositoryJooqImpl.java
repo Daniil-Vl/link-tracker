@@ -16,6 +16,7 @@ import org.jooq.Record1;
 import org.jooq.Record4;
 import org.jooq.Result;
 import org.jooq.exception.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,12 +29,18 @@ public class SubscriptionRepositoryJooqImpl implements SubscriptionRepository {
 
     @Override
     public SubscriptionDto subscribe(Long chatId, Long linkId) {
-        Result<SubscriptionRecord> result = dslContext
-            .insertInto(subscription)
-            .set(subscription.CHAT_ID, chatId)
-            .set(subscription.LINK_ID, linkId)
-            .returning()
-            .fetch();
+        Result<SubscriptionRecord> result;
+        try {
+            result = dslContext
+                .insertInto(subscription)
+                .set(subscription.CHAT_ID, chatId)
+                .set(subscription.LINK_ID, linkId)
+                .returning()
+                .fetch();
+        } catch (DuplicateKeyException e) {
+            log.warn("Tried to add existing subscription (chat, link) = (%s, %s)".formatted(chatId, linkId));
+            return new SubscriptionDto(chatId, linkId);
+        }
 
         if (result.isEmpty()) {
             String errorMessage = "Jooq subscription repository subscribe query didn't return SubscriptionDto";
@@ -43,9 +50,8 @@ public class SubscriptionRepositoryJooqImpl implements SubscriptionRepository {
 
         log.info("Jooq subscription repository subscribe query returning");
         log.info("\n" + result);
-        SubscriptionRecord subscriptionRecord = result.getFirst();
 
-        return subscriptionRecordToDto(subscriptionRecord);
+        return subscriptionRecordToDto(result.getFirst());
     }
 
     @Override

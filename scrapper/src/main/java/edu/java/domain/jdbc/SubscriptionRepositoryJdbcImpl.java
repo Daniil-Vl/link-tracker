@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -31,12 +32,19 @@ public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
 
     @Override
     public SubscriptionDto subscribe(Long chatId, Long linkId) {
-        return jdbcClient
-            .sql(SUBSCRIBE_QUERY)
-            .param(chatId)
-            .param(linkId)
-            .query(new SubscriptionRowMapper())
-            .single();
+        SubscriptionDto subscriptionDto;
+        try {
+            subscriptionDto = jdbcClient
+                .sql(SUBSCRIBE_QUERY)
+                .param(chatId)
+                .param(linkId)
+                .query(new SubscriptionRowMapper())
+                .single();
+        } catch (DuplicateKeyException e) {
+            log.warn("Tried to add existing subscription (chat, link) = (%s, %s)".formatted(chatId, linkId));
+            subscriptionDto = new SubscriptionDto(chatId, linkId);
+        }
+        return subscriptionDto;
     }
 
     @Override
