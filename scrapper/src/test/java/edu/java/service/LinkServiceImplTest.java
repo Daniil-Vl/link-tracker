@@ -97,7 +97,7 @@ class LinkServiceImplTest {
 
     @Test
     void listAll_thenCallSubscriptionRepositoryMethod() {
-        linkService.listAll(tgChatId);
+        linkService.getAllSubscriptions(tgChatId);
 
         Mockito.verify(subscriptionRepository).getAllSubscriptions(tgChatId);
     }

@@ -4,6 +4,7 @@ import edu.java.dto.dao.LinkDto;
 import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;
 import java.net.URI;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -29,12 +30,20 @@ public interface LinkService {
     LinkDto remove(long tgChatId, URI url) throws ChatNotExistException, LinkNotExistException;
 
     /**
+     * Retrieve all links, that were checked more than N units of time ago
+     *
+     * @param interval - units of time
+     * @return list of suitable links
+     */
+    List<LinkDto> findAllOldLinks(Duration interval);
+
+    /**
      * Retrieve all links, tracked by certain user
      *
      * @param tgChatId - user's telegram chat id
      * @return list of tracked links
      */
-    List<LinkDto> listAll(long tgChatId);
+    List<LinkDto> getAllSubscriptions(long tgChatId);
 
     /**
      * Modify updateAt link's field in db

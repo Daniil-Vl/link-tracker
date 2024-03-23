@@ -3,7 +3,6 @@ package edu.java.service;
 import edu.java.LinkUpdateRequest;
 import edu.java.client.bot.BotClient;
 import edu.java.configuration.ApplicationConfig;
-import edu.java.domain.LinkRepository;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.service.link_update_searching.SearchersManagerService;
@@ -18,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class LinkUpdaterServiceImpl implements LinkUpdaterService {
     private final LinkService linkService;
     private final ApplicationConfig.Scheduler scheduler;
-    private final LinkRepository linkRepository;
     private final BotClient botClient;
     private final SearchersManagerService searchersManagerService;
 
@@ -26,8 +24,8 @@ public class LinkUpdaterServiceImpl implements LinkUpdaterService {
     @Transactional
     public int update() {
         log.info("Call update method inside LinkUpdaterImpl");
-        List<LinkDto> linkDtoList = linkRepository.findAll(scheduler.forceCheckDelay());
         int numberOfProcessedUpdates = 0;
+        List<LinkDto> linkDtoList = linkService.findAllOldLinks(scheduler.forceCheckDelay());
 
         for (LinkDto linkDto : linkDtoList) {
             linkService.markNewCheck(linkDto.id(), OffsetDateTime.now());

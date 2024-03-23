@@ -35,7 +35,7 @@ public class ScrapperControllerImpl implements ScrapperController {
 
     @Override
     public ListLinksResponse getLinks(Long tgChatId) {
-        List<LinkDto> linkDtoList = linkService.listAll(tgChatId);
+        List<LinkDto> linkDtoList = linkService.getAllSubscriptions(tgChatId);
 
         List<LinkResponse> linkResponses = linkDtoList
             .stream()

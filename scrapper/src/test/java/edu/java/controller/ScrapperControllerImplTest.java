@@ -123,7 +123,7 @@ class ScrapperControllerImplTest {
         );
         ListLinksResponse expectedResponse = convertDtoListToResponse(linkDtoList);
 
-        Mockito.when(linkService.listAll(chatId)).thenReturn(linkDtoList);
+        Mockito.when(linkService.getAllSubscriptions(chatId)).thenReturn(linkDtoList);
 
         mockMvc
             .perform(
@@ -137,7 +137,7 @@ class ScrapperControllerImplTest {
                 content().json(objectMapper.writeValueAsString(expectedResponse))
             );
 
-        Mockito.verify(linkService).listAll(chatId);
+        Mockito.verify(linkService).getAllSubscriptions(chatId);
     }
 
     @Test
@@ -154,7 +154,7 @@ class ScrapperControllerImplTest {
                 status().isBadRequest()
             );
 
-        Mockito.verify(linkService, Mockito.times(0)).listAll(chatId);
+        Mockito.verify(linkService, Mockito.times(0)).getAllSubscriptions(chatId);
     }
 
     @Test
@@ -163,7 +163,7 @@ class ScrapperControllerImplTest {
         List<LinkDto> linkDtoList = List.of();
         ListLinksResponse expectedResponse = convertDtoListToResponse(linkDtoList);
 
-        Mockito.when(linkService.listAll(chatId)).thenReturn(linkDtoList);
+        Mockito.when(linkService.getAllSubscriptions(chatId)).thenReturn(linkDtoList);
 
         mockMvc
             .perform(
@@ -177,7 +177,7 @@ class ScrapperControllerImplTest {
                 content().json(objectMapper.writeValueAsString(expectedResponse))
             );
 
-        Mockito.verify(linkService).listAll(chatId);
+        Mockito.verify(linkService).getAllSubscriptions(chatId);
     }
 
     @Test

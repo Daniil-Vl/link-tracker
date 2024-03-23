@@ -6,6 +6,7 @@ import edu.java.dto.dao.LinkDto;
 import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;
 import java.net.URI;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +49,12 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public List<LinkDto> listAll(long tgChatId) {
+    public List<LinkDto> findAllOldLinks(Duration interval) {
+        return linkRepository.findAll(interval);
+    }
+
+    @Override
+    public List<LinkDto> getAllSubscriptions(long tgChatId) {
         return subscriptionRepository.getAllSubscriptions(tgChatId);
     }
 
