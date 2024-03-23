@@ -1,4 +1,4 @@
-package edu.java.exceptionhandler;
+package edu.java.exception_handler;
 
 import edu.java.ApiErrorResponse;
 import edu.java.exceptions.ChatNotExistException;

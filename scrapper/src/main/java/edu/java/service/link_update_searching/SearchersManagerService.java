@@ -1,4 +1,4 @@
-package edu.java.service.linkupdatesearching;
+package edu.java.service.link_update_searching;
 
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;

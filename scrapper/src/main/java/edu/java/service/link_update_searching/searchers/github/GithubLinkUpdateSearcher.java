@@ -1,11 +1,11 @@
-package edu.java.service.linkupdatesearching.searchers.github;
+package edu.java.service.link_update_searching.searchers.github;
 
 import edu.java.client.github.GithubClient;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.github.GithubEventResponse;
 import edu.java.service.LinkService;
-import edu.java.service.linkupdatesearching.searchers.LinkUpdateSearcher;
+import edu.java.service.link_update_searching.searchers.LinkUpdateSearcher;
 import java.net.URI;
 import java.util.List;
 import lombok.Getter;

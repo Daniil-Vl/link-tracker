@@ -1,11 +1,11 @@
-package edu.java.service.linkupdatesearching.searchers.stackoverflow;
+package edu.java.service.link_update_searching.searchers.stackoverflow;
 
 import edu.java.client.stackoverflow.StackoverflowClient;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
 import edu.java.service.LinkService;
-import edu.java.service.linkupdatesearching.searchers.LinkUpdateSearcher;
+import edu.java.service.link_update_searching.searchers.LinkUpdateSearcher;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

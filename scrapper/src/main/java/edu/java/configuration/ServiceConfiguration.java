@@ -10,7 +10,7 @@ import edu.java.service.LinkUpdaterService;
 import edu.java.service.LinkUpdaterServiceImpl;
 import edu.java.service.TgChatService;
 import edu.java.service.TgChatServiceImpl;
-import edu.java.service.linkupdatesearching.SearchersManagerService;
+import edu.java.service.link_update_searching.SearchersManagerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

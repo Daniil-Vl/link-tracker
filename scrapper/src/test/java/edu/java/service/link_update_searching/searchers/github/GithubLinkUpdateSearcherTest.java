@@ -1,4 +1,4 @@
-package edu.java.service.linkupdatesearching.searchers.github;
+package edu.java.service.link_update_searching.searchers.github;
 
 import edu.java.client.github.GithubClient;
 import edu.java.dto.LinkUpdate;

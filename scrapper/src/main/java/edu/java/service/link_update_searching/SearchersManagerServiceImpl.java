@@ -1,8 +1,8 @@
-package edu.java.service.linkupdatesearching;
+package edu.java.service.link_update_searching;
 
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
-import edu.java.service.linkupdatesearching.searchers.LinkUpdateSearcher;
+import edu.java.service.link_update_searching.searchers.LinkUpdateSearcher;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

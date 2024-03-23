@@ -6,7 +6,7 @@ import edu.java.configuration.ApplicationConfig;
 import edu.java.domain.LinkRepository;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
-import edu.java.service.linkupdatesearching.SearchersManagerService;
+import edu.java.service.link_update_searching.SearchersManagerService;
 import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

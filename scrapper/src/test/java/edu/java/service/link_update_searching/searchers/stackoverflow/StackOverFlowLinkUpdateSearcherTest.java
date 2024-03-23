@@ -1,4 +1,4 @@
-package edu.java.service.linkupdatesearching.searchers.stackoverflow;
+package edu.java.service.link_update_searching.searchers.stackoverflow;
 
 import edu.java.client.stackoverflow.StackoverflowClient;
 import edu.java.dto.LinkUpdate;
@@ -9,7 +9,6 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
