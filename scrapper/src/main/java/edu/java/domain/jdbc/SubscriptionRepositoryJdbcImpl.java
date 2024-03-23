@@ -18,15 +18,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Log4j2
 public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
-    private static final String SUBSCRIBE_QUERY =
-        "INSERT INTO subscription(chat_id, link_id) VALUES (?, ?) RETURNING *";
-    private static final String UNSUBSCRIBE_QUERY =
-        "DELETE FROM subscription WHERE chat_id = ? AND link_id = ? RETURNING *";
-    private static final String SELECT_ALL_SUBSCRIBED_USERS =
-        "SELECT chat_id FROM subscription WHERE link_id = ?";
-    private static final String SELECT_ALL_SUBSCRIPTIONS =
-        "SELECT l.id, l.url, l.updated_at, l.last_check_time from subscription s "
-            + "JOIN link l on l.id = s.link_id WHERE chat_id = ?";
 
     private final JdbcClient jdbcClient;
 
@@ -35,7 +26,7 @@ public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
         SubscriptionDto subscriptionDto;
         try {
             subscriptionDto = jdbcClient
-                .sql(SUBSCRIBE_QUERY)
+                .sql("INSERT INTO subscription(chat_id, link_id) VALUES (?, ?) RETURNING *")
                 .param(chatId)
                 .param(linkId)
                 .query(new SubscriptionRowMapper())
@@ -50,7 +41,7 @@ public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
     @Override
     public Optional<SubscriptionDto> unsubscribe(Long chatId, Long linkId) {
         return jdbcClient
-            .sql(UNSUBSCRIBE_QUERY)
+            .sql("DELETE FROM subscription WHERE chat_id = ? AND link_id = ? RETURNING *")
             .param(chatId)
             .param(linkId)
             .query(new SubscriptionRowMapper())
@@ -60,7 +51,7 @@ public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
     @Override
     public List<Long> getAllSubscribers(Long linkId) {
         return jdbcClient
-            .sql(SELECT_ALL_SUBSCRIBED_USERS)
+            .sql("SELECT chat_id FROM subscription WHERE link_id = ?")
             .param(linkId)
             .query(Long.class)
             .list();
@@ -69,7 +60,8 @@ public class SubscriptionRepositoryJdbcImpl implements SubscriptionRepository {
     @Override
     public List<LinkDto> getAllSubscriptions(Long chatId) {
         return jdbcClient
-            .sql(SELECT_ALL_SUBSCRIPTIONS)
+            .sql("SELECT l.id, l.url, l.updated_at, l.last_check_time from subscription s "
+                + "JOIN link l on l.id = s.link_id WHERE chat_id = ?")
             .param(chatId)
             .query(new LinkRepositoryJdbcImpl.LinkRowMapper())
             .list();

@@ -11,17 +11,13 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Log4j2
 public class ChatRepositoryJdbcImpl implements ChatRepository {
-    private static final String ADD_CHAT_QUERY = "INSERT INTO chat(chat_id) VALUES (?)";
-    private static final String REMOVE_CHAT_QUERY = "DELETE FROM chat WHERE chat_id = ?";
-    private static final String FIND_ALL_QUERY = "SELECT * FROM chat";
-    private static final String FIND_BY_ID = "SELECT * FROM chat WHERE chat_id = ?";
 
     private final JdbcClient jdbcClient;
 
     @Override
     public int add(Long chatId) {
         int rowsAffected = jdbcClient
-            .sql(ADD_CHAT_QUERY)
+            .sql("INSERT INTO chat(chat_id) VALUES (?)")
             .param(chatId)
             .update();
 
@@ -32,7 +28,7 @@ public class ChatRepositoryJdbcImpl implements ChatRepository {
     @Override
     public int remove(Long chatId) {
         int rowsAffected = jdbcClient
-            .sql(REMOVE_CHAT_QUERY)
+            .sql("DELETE FROM chat WHERE chat_id = ?")
             .param(chatId)
             .update();
 
@@ -43,7 +39,7 @@ public class ChatRepositoryJdbcImpl implements ChatRepository {
     @Override
     public boolean isExists(Long chatId) {
         return jdbcClient
-            .sql(FIND_BY_ID)
+            .sql("SELECT * FROM chat WHERE chat_id = ?")
             .param(chatId)
             .query(Long.class)
             .optional().isPresent();
@@ -52,7 +48,7 @@ public class ChatRepositoryJdbcImpl implements ChatRepository {
     @Override
     public List<Long> findAll() {
         return jdbcClient
-            .sql(FIND_ALL_QUERY)
+            .sql("SELECT * FROM chat")
             .query(
                 (rs, rowNum) -> rs.getLong("chat_id")
             )

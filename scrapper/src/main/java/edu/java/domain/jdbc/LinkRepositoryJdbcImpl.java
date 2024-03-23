@@ -21,18 +21,6 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Log4j2
 public class LinkRepositoryJdbcImpl implements LinkRepository {
-    private static final String ADD_LINK_QUERY =
-        "INSERT INTO link(url, updated_at, last_check_time) VALUES (?, ?, ?) RETURNING *";
-    private static final String REMOVE_LINK_QUERY_BY_ID = "DELETE FROM link WHERE id = ? RETURNING *";
-    private static final String REMOVE_LINK_QUERY_BY_URL = "DELETE FROM link WHERE url = ? RETURNING *";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM link WHERE id = ?";
-    private static final String FIND_BY_ID_URL = "SELECT * FROM link WHERE url = ?";
-    private static final String FIND_ALL_QUERY = "SELECT * FROM link";
-    private static final String FIND_ALL_QUERY_BY_TIME = "SELECT * FROM link WHERE last_check_time < ?";
-    private static final String FIND_ALL_BY_ID = "SELECT * FROM link WHERE id IN (:ids)";
-    private static final String MARK_NEW_UPDATE_QUERY =
-        "UPDATE link SET updated_at = ?, last_check_time = ? WHERE id = ?";
-    private static final String MARK_NEW_CHECK_TIME = "UPDATE link SET last_check_time = ? WHERE id = ?";
 
     private final JdbcClient jdbcClient;
 
@@ -40,7 +28,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     public LinkDto add(String url) {
         try {
             return jdbcClient
-                .sql(ADD_LINK_QUERY)
+                .sql("INSERT INTO link(url, updated_at, last_check_time) VALUES (?, ?, ?) RETURNING *")
                 .param(url)
                 .param(OffsetDateTime.now())
                 .param(OffsetDateTime.now())
@@ -55,7 +43,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public Optional<LinkDto> remove(Long linkId) {
         return jdbcClient
-            .sql(REMOVE_LINK_QUERY_BY_ID)
+            .sql("DELETE FROM link WHERE id = ? RETURNING *")
             .param(linkId)
             .query(new LinkRowMapper())
             .optional();
@@ -64,7 +52,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public Optional<LinkDto> remove(String url) {
         return jdbcClient
-            .sql(REMOVE_LINK_QUERY_BY_URL)
+            .sql("DELETE FROM link WHERE url = ? RETURNING *")
             .param(url)
             .query(new LinkRowMapper())
             .optional();
@@ -73,7 +61,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public Optional<LinkDto> findById(Long linkId) {
         return jdbcClient
-            .sql(FIND_BY_ID_QUERY)
+            .sql("SELECT * FROM link WHERE id = ?")
             .param(linkId)
             .query(new LinkRowMapper())
             .optional();
@@ -82,7 +70,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public Optional<LinkDto> findByUrl(String url) {
         return jdbcClient
-            .sql(FIND_BY_ID_URL)
+            .sql("SELECT * FROM link WHERE url = ?")
             .param(url)
             .query(new LinkRowMapper())
             .optional();
@@ -91,7 +79,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public List<LinkDto> findAllById(Set<Long> setOfLinksId) {
         return jdbcClient
-            .sql(FIND_ALL_BY_ID)
+            .sql("SELECT * FROM link WHERE id IN (:ids)")
             .param("ids", setOfLinksId.stream().toList())
             .query(new LinkRowMapper())
             .list();
@@ -100,7 +88,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public List<LinkDto> findAll() {
         return jdbcClient
-            .sql(FIND_ALL_QUERY)
+            .sql("SELECT * FROM link")
             .query(new LinkRowMapper())
             .list();
     }
@@ -108,7 +96,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public List<LinkDto> findAll(Duration interval) {
         return jdbcClient
-            .sql(FIND_ALL_QUERY_BY_TIME)
+            .sql("SELECT * FROM link WHERE last_check_time < ?")
             .param(OffsetDateTime.now().minus(interval))
             .query(new LinkRowMapper())
             .list();
@@ -117,7 +105,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public int markNewUpdate(Long linkId, OffsetDateTime newUpdatedAt) {
         return jdbcClient
-            .sql(MARK_NEW_UPDATE_QUERY)
+            .sql("UPDATE link SET updated_at = ?, last_check_time = ? WHERE id = ?")
             .param(newUpdatedAt)
             .param(newUpdatedAt)
             .param(linkId)
@@ -127,7 +115,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     @Override
     public int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime) {
         return jdbcClient
-            .sql(MARK_NEW_CHECK_TIME)
+            .sql("UPDATE link SET last_check_time = ? WHERE id = ?")
             .param(newLastCheckTime)
             .param(linkId)
             .update();
