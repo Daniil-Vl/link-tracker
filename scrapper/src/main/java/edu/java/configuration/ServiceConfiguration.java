@@ -57,7 +57,6 @@ public class ServiceConfiguration {
             linkService,
             scheduler,
 //            linkRepositoryJdbcImpl,
-            linkRepositoryJooqImpl,
             botClient,
             searchersManagerService
         );
