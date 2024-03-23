@@ -14,12 +14,12 @@ public class LinkDtoRecordMapper
     Link link = Link.LINK;
 
     @Override
-    public @Nullable LinkDto map(Record4<Long, String, OffsetDateTime, OffsetDateTime> record) {
+    public @Nullable LinkDto map(Record4<Long, String, OffsetDateTime, OffsetDateTime> record4) {
         return new LinkDto(
-            record.get(link.ID, Long.class),
-            URI.create(record.get(link.URL, String.class)),
-            record.get(link.UPDATED_AT, OffsetDateTime.class).withOffsetSameInstant(ZoneOffset.UTC),
-            record.get(link.LAST_CHECK_TIME, OffsetDateTime.class).withOffsetSameInstant(ZoneOffset.UTC)
+            record4.get(link.ID, Long.class),
+            URI.create(record4.get(link.URL, String.class)),
+            record4.get(link.UPDATED_AT, OffsetDateTime.class).withOffsetSameInstant(ZoneOffset.UTC),
+            record4.get(link.LAST_CHECK_TIME, OffsetDateTime.class).withOffsetSameInstant(ZoneOffset.UTC)
         );
     }
 }

@@ -14,7 +14,6 @@ public class LiquibasePostgresIntegrationTest extends IntegrationTest {
 
     @Test
     void testLinkTable() {
-        Long expectedLinkId = 1L;
         String linkUrl = "url";
         OffsetDateTime expectedUpdatedAt = OffsetDateTime.of(2024, 1, 1, 1, 1, 1, 0, ZoneOffset.UTC);
         OffsetDateTime expectedLastCheckTime = OffsetDateTime.of(2024, 2, 2, 2, 2, 2, 0, ZoneOffset.UTC);

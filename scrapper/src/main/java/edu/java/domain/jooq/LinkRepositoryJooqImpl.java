@@ -25,7 +25,7 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
 
     @Override
     public LinkDto add(String url) {
-        List<LinkDto> result = List.of();
+        List<LinkDto> result;
         try {
             result = dslContext
                 .insertInto(link)
@@ -157,7 +157,7 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
             .where(link.LAST_CHECK_TIME.lt(OffsetDateTime.now().minus(interval)))
             .fetch(new LinkDtoRecordMapper());
 
-        log.info("Jooq link repository findAll query returning");
+        log.info("Jooq link repository findAll by time query returning");
         log.info("\n" + result);
 
         return result;
