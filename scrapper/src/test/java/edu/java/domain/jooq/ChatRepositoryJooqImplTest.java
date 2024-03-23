@@ -1,6 +1,6 @@
-package edu.java.domain;
+package edu.java.domain.jooq;
 
-import edu.java.domain.jooq.ChatRepositoryJooqImpl;
+import edu.java.domain.ChatRepositoryTest;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,7 +9,7 @@ public class ChatRepositoryJooqImplTest extends ChatRepositoryTest {
     private DSLContext dslContext;
 
     @Override
-    void initRepository() {
+    public void initRepository() {
         chatRepository = new ChatRepositoryJooqImpl(dslContext);
     }
 }

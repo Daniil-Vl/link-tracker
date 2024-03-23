@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -28,7 +29,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     private static final String FIND_BY_ID_URL = "SELECT * FROM link WHERE url = ?";
     private static final String FIND_ALL_QUERY = "SELECT * FROM link";
     private static final String FIND_ALL_QUERY_BY_TIME = "SELECT * FROM link WHERE last_check_time < ?";
-    private static final String FIND_ALL_BY_ID = "SELECT * FROM link WHERE id IN (?)";
+    private static final String FIND_ALL_BY_ID = "SELECT * FROM link WHERE id IN (:ids)";
     private static final String MARK_NEW_UPDATE_QUERY =
         "UPDATE link SET updated_at = ?, last_check_time = ? WHERE id = ?";
     private static final String MARK_NEW_CHECK_TIME = "UPDATE link SET last_check_time = ? WHERE id = ?";
@@ -37,13 +38,18 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
 
     @Override
     public LinkDto add(String url) {
-        return jdbcClient
-            .sql(ADD_LINK_QUERY)
-            .param(url)
-            .param(OffsetDateTime.now())
-            .param(OffsetDateTime.now())
-            .query(new LinkRowMapper())
-            .single();
+        try {
+            return jdbcClient
+                .sql(ADD_LINK_QUERY)
+                .param(url)
+                .param(OffsetDateTime.now())
+                .param(OffsetDateTime.now())
+                .query(new LinkRowMapper())
+                .single();
+        } catch (DuplicateKeyException e) {
+            log.warn("Try to add existing url = %s".formatted(url));
+            return findByUrl(url).get();
+        }
     }
 
     @Override
@@ -86,7 +92,7 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     public List<LinkDto> findAllById(Set<Long> setOfLinksId) {
         return jdbcClient
             .sql(FIND_ALL_BY_ID)
-            .param(setOfLinksId.toString().substring(1, setOfLinksId.toString().length() - 1))
+            .param("ids", setOfLinksId.stream().toList())
             .query(new LinkRowMapper())
             .list();
     }

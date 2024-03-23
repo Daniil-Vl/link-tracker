@@ -1,10 +1,10 @@
-package edu.java.domain;
+package edu.java.domain.jdbc;
 
-import edu.java.domain.jdbc.ChatRepositoryJdbcImpl;
+import edu.java.domain.ChatRepositoryTest;
 
 public class ChatRepositoryJdbcImplTest extends ChatRepositoryTest {
     @Override
-    void initRepository() {
+    public void initRepository() {
         chatRepository = new ChatRepositoryJdbcImpl(jdbcClient);
     }
 }

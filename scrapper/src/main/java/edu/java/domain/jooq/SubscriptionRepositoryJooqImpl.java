@@ -4,16 +4,15 @@ import edu.java.domain.SubscriptionRepository;
 import edu.java.domain.jooq.generated.tables.Link;
 import edu.java.domain.jooq.generated.tables.Subscription;
 import edu.java.domain.jooq.generated.tables.records.SubscriptionRecord;
+import edu.java.domain.jooq.utils.LinkDtoRecordMapper;
 import edu.java.dto.dao.LinkDto;
 import edu.java.dto.dao.SubscriptionDto;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jooq.DSLContext;
 import org.jooq.Record1;
-import org.jooq.Record4;
 import org.jooq.Result;
 import org.jooq.exception.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
@@ -91,17 +90,17 @@ public class SubscriptionRepositoryJooqImpl implements SubscriptionRepository {
 
     @Override
     public List<LinkDto> getAllSubscriptions(Long chatId) {
-        Result<Record4<Long, String, OffsetDateTime, OffsetDateTime>> result = dslContext
+        List<LinkDto> fetched = dslContext
             .select(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
             .from(subscription)
             .join(link).on(link.ID.eq(subscription.LINK_ID))
             .where(subscription.CHAT_ID.eq(chatId))
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         log.info("Jooq subscription repository getAllSubscriptions query returning");
-        log.info("\n" + result);
+        log.info("\n" + fetched);
 
-        return result.into(LinkDto.class);
+        return fetched;
     }
 
     private SubscriptionDto subscriptionRecordToDto(SubscriptionRecord subscriptionRecord) {

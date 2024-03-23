@@ -2,9 +2,8 @@ package edu.java.domain.jooq;
 
 import edu.java.domain.LinkRepository;
 import edu.java.domain.jooq.generated.tables.Link;
-import edu.java.domain.jooq.generated.tables.records.LinkRecord;
+import edu.java.domain.jooq.utils.LinkDtoRecordMapper;
 import edu.java.dto.dao.LinkDto;
-import java.net.URI;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -13,9 +12,8 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.jooq.DSLContext;
-import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.exception.DataAccessException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -27,13 +25,19 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
 
     @Override
     public LinkDto add(String url) {
-        Result<LinkRecord> result = dslContext
-            .insertInto(link)
-            .set(link.URL, url)
-            .set(link.UPDATED_AT, OffsetDateTime.now())
-            .set(link.LAST_CHECK_TIME, OffsetDateTime.now())
-            .returning(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
-            .fetch();
+        List<LinkDto> result = List.of();
+        try {
+            result = dslContext
+                .insertInto(link)
+                .set(link.URL, url)
+                .set(link.UPDATED_AT, OffsetDateTime.now())
+                .set(link.LAST_CHECK_TIME, OffsetDateTime.now())
+                .returning(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
+                .fetch(new LinkDtoRecordMapper());
+        } catch (DuplicateKeyException e) {
+            log.warn("Try to add existing url = %s".formatted(url));
+            return findByUrl(url).get();
+        }
 
         if (result.isEmpty()) {
             log.warn("Jooq link repository add query didn't return link");
@@ -42,18 +46,17 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
 
         log.info("Jooq link repository add query returning");
         log.info("\n" + result);
-        LinkRecord linkRecord = result.getFirst();
 
-        return linkRecordToLinkDto(linkRecord);
+        return result.getFirst();
     }
 
     @Override
     public Optional<LinkDto> remove(Long linkId) {
-        Result<LinkRecord> result = dslContext
+        List<LinkDto> result = dslContext
             .delete(link)
             .where(link.ID.eq(linkId))
             .returning(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         if (result.isEmpty()) {
             return Optional.empty();
@@ -62,19 +65,16 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
         log.info("Jooq link repository remove by id query returning");
         log.info("\n" + result);
 
-        LinkRecord linkRecord = result.getFirst();
-        return Optional.of(
-            linkRecordToLinkDto(linkRecord)
-        );
+        return Optional.of(result.getFirst());
     }
 
     @Override
     public Optional<LinkDto> remove(String url) {
-        Result<LinkRecord> result = dslContext
+        List<LinkDto> result = dslContext
             .delete(link)
             .where(link.URL.eq(url))
             .returning(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         if (result.isEmpty()) {
             return Optional.empty();
@@ -83,19 +83,16 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
         log.info("Jooq link repository remove by url query returning");
         log.info("\n" + result);
 
-        LinkRecord linkRecord = result.getFirst();
-        return Optional.of(
-            linkRecordToLinkDto(linkRecord)
-        );
+        return Optional.of(result.getFirst());
     }
 
     @Override
     public Optional<LinkDto> findById(Long linkId) {
-        Result<Record> result = dslContext
-            .select()
+        List<LinkDto> result = dslContext
+            .select(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
             .from(link)
             .where(link.ID.eq(linkId))
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         if (result.isEmpty()) {
             return Optional.empty();
@@ -104,19 +101,16 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
         log.info("Jooq link repository findById query returning");
         log.info("\n" + result);
 
-        LinkRecord linkRecord = (LinkRecord) result.getFirst();
-        return Optional.of(
-            linkRecordToLinkDto(linkRecord)
-        );
+        return Optional.of(result.getFirst());
     }
 
     @Override
     public Optional<LinkDto> findByUrl(String url) {
-        Result<Record> result = dslContext
-            .select()
+        List<LinkDto> result = dslContext
+            .select(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
             .from(link)
             .where(link.URL.eq(url))
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         if (result.isEmpty()) {
             return Optional.empty();
@@ -125,51 +119,48 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
         log.info("Jooq link repository findByUrl query returning");
         log.info("\n" + result);
 
-        LinkRecord linkRecord = (LinkRecord) result.getFirst();
-        return Optional.of(
-            linkRecordToLinkDto(linkRecord)
-        );
+        return Optional.of(result.getFirst());
     }
 
     @Override
     public List<LinkDto> findAllById(Set<Long> setOfLinksId) {
-        Result<Record> result = dslContext
-            .select()
+        List<LinkDto> result = dslContext
+            .select(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
             .from(link)
             .where(link.ID.in(setOfLinksId))
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         log.info("Jooq link repository findAllById query returning");
         log.info("\n" + result);
 
-        return result.into(LinkDto.class);
+        return result;
     }
 
     @Override
     public List<LinkDto> findAll() {
-        Result<Record> result = dslContext
-            .select()
+        List<LinkDto> result = dslContext
+            .select(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
             .from(link)
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
         log.info("Jooq link repository findAll query returning");
         log.info("\n" + result);
 
-        return result.into(LinkDto.class);
+        return result;
     }
 
     @Override
     public List<LinkDto> findAll(Duration interval) {
-        Result<Record> result = dslContext
-            .select()
+        List<LinkDto> result = dslContext
+            .select(link.ID, link.URL, link.UPDATED_AT, link.LAST_CHECK_TIME)
             .from(link)
             .where(link.LAST_CHECK_TIME.lt(OffsetDateTime.now().minus(interval)))
-            .fetch();
+            .fetch(new LinkDtoRecordMapper());
 
-        log.info("Jooq link repository findAll with duration query returning");
+        log.info("Jooq link repository findAll query returning");
         log.info("\n" + result);
 
-        return result.into(LinkDto.class);
+        return result;
     }
 
     @Override
@@ -195,14 +186,5 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
         log.info("Jooq link repository markNewCheck query rows affected: %s".formatted(rowsAffected));
 
         return rowsAffected;
-    }
-
-    private LinkDto linkRecordToLinkDto(LinkRecord linkRecord) {
-        return new LinkDto(
-            linkRecord.getId(),
-            URI.create(linkRecord.getUrl()),
-            linkRecord.getUpdatedAt(),
-            linkRecord.getLastCheckTime()
-        );
     }
 }

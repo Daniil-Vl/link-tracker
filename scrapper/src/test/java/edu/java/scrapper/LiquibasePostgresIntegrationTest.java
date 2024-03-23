@@ -27,12 +27,12 @@ public class LiquibasePostgresIntegrationTest extends IntegrationTest {
         );
 
         OffsetDateTime actualUpdatedAt = jdbcTemplate.queryForObject(
-            "SELECT updated_at FROM link WHERE id = %s".formatted(expectedLinkId),
+            "SELECT updated_at FROM link WHERE url = %s".formatted(linkUrl),
             OffsetDateTime.class
         );
 
         OffsetDateTime actualLastCheckTime = jdbcTemplate.queryForObject(
-            "SELECT last_check_time FROM link WHERE id = %s".formatted(expectedLinkId),
+            "SELECT last_check_time FROM link WHERE url = %s".formatted(linkUrl),
             OffsetDateTime.class
         );
 
