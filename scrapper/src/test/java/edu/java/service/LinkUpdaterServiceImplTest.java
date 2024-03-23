@@ -3,7 +3,6 @@ package edu.java.service;
 import edu.java.LinkUpdateRequest;
 import edu.java.client.bot.BotClient;
 import edu.java.configuration.ApplicationConfig;
-import edu.java.domain.LinkRepository;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
 import edu.java.service.link_update_searching.SearchersManagerService;
@@ -31,8 +30,6 @@ public class LinkUpdaterServiceImplTest {
     @Mock
     private LinkService linkService;
     @Mock
-    private LinkRepository linkRepository;
-    @Mock
     private BotClient botClient;
     @Mock
     private SearchersManagerService searchersManagerService;
@@ -43,7 +40,6 @@ public class LinkUpdaterServiceImplTest {
         linkUpdaterService = new LinkUpdaterServiceImpl(
             linkService,
             scheduler,
-            linkRepository,
             botClient,
             searchersManagerService
         );
@@ -52,7 +48,7 @@ public class LinkUpdaterServiceImplTest {
     @Test
     void testUpdate_noUpdatesFound() {
         Mockito.when(
-            linkRepository.findAll(any(Duration.class))
+            linkService.findAllOldLinks(any(Duration.class))
         ).thenReturn(List.of());
 
         int processedUpdates = linkUpdaterService.update();
@@ -80,7 +76,7 @@ public class LinkUpdaterServiceImplTest {
             List.of()
         );
 
-        Mockito.when(linkRepository.findAll(scheduler.forceCheckDelay())).thenReturn(links);
+        Mockito.when(linkService.findAllOldLinks(scheduler.forceCheckDelay())).thenReturn(links);
         Mockito.when(searchersManagerService.getUpdates(links.getFirst())).thenReturn(updates);
         Mockito.when(linkService.getAllSubscribers(links.getFirst().id())).thenReturn(List.of());
 
