@@ -15,7 +15,6 @@ public interface LinkRepository {
      * @param url - link url
      * @return inserted link
      */
-    @Transactional
     LinkDto add(String url);
 
     /**
@@ -24,7 +23,6 @@ public interface LinkRepository {
      * @param linkId - link id
      * @return removed link
      */
-    @Transactional
     Optional<LinkDto> remove(Long linkId);
 
     /**
@@ -33,7 +31,6 @@ public interface LinkRepository {
      * @param url - link rul
      * @return removed link
      */
-    @Transactional
     Optional<LinkDto> remove(String url);
 
     /**

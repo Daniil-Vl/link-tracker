@@ -11,6 +11,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -22,6 +23,7 @@ public class LinkUpdaterServiceImpl implements LinkUpdaterService {
     private final SearchersManagerService searchersManagerService;
 
     @Override
+    @Transactional
     public int update() {
         log.info("Call update method inside LinkUpdaterImpl");
         List<LinkDto> linkDtoList = linkRepository.findAll(scheduler.forceCheckDelay());
