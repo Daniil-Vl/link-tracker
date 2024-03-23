@@ -6,7 +6,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface LinkRepository {
     /**
@@ -83,7 +82,8 @@ public interface LinkRepository {
 
     /**
      * Updates last_check_time field in db
-     * @param linkId - link to update
+     *
+     * @param linkId           - link to update
      * @param newLastCheckTime - new last_check_time value
      * @return number of affected rows
      */
