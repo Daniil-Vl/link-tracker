@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 @Log4j2
+@SuppressWarnings("MultipleStringLiterals")
 public class LinkRepositoryJdbcImpl implements LinkRepository {
 
     private final JdbcClient jdbcClient;
@@ -113,11 +114,11 @@ public class LinkRepositoryJdbcImpl implements LinkRepository {
     }
 
     @Override
-    public int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime) {
+    public int markNewCheck(List<Long> linkIds, OffsetDateTime newLastCheckTime) {
         return jdbcClient
-            .sql("UPDATE link SET last_check_time = ? WHERE id = ?")
-            .param(newLastCheckTime)
-            .param(linkId)
+            .sql("UPDATE link SET last_check_time = :last_check_time WHERE id IN (:ids)")
+            .param("last_check_time", newLastCheckTime)
+            .param("ids", linkIds)
             .update();
     }
 

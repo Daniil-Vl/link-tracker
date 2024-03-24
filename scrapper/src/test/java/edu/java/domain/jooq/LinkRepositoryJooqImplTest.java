@@ -1,5 +1,6 @@
-package edu.java.domain;
+package edu.java.domain.jooq;
 
+import edu.java.domain.LinkRepositoryTest;
 import edu.java.domain.jooq.LinkRepositoryJooqImpl;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Autowired;

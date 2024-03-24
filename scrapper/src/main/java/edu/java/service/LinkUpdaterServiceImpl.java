@@ -28,25 +28,22 @@ public class LinkUpdaterServiceImpl implements LinkUpdaterService {
         List<LinkDto> linkDtoList = linkService.findAllOldLinks(scheduler.forceCheckDelay());
 
         for (LinkDto linkDto : linkDtoList) {
-            linkService.markNewCheck(linkDto.id(), OffsetDateTime.now());
             List<LinkUpdate> updates = searchersManagerService.getUpdates(linkDto);
-
-            if (updates.isEmpty()) {
-                continue;
-            }
-
-            for (LinkUpdate update : updates) {
-                numberOfProcessedUpdates += 1;
-                botClient.sendLinkUpdateRequest(
-                    new LinkUpdateRequest(
-                        update.id(),
-                        update.url(),
-                        update.description(),
-                        linkService.getAllSubscribers(linkDto.id())
-                    )
-                );
+            numberOfProcessedUpdates += updates.size();
+            for (LinkUpdate linkUpdate : updates) {
+                botClient.sendLinkUpdateRequest(new LinkUpdateRequest(
+                    linkUpdate.id(),
+                    linkUpdate.url(),
+                    linkUpdate.description(),
+                    linkService.getAllSubscribers(linkDto.id())
+                ));
             }
         }
+
+        linkService.markNewCheck(
+            linkDtoList.stream().map(LinkDto::id).toList(),
+            OffsetDateTime.now()
+        );
 
         return numberOfProcessedUpdates;
     }

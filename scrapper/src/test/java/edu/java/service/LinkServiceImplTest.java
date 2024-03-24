@@ -7,6 +7,7 @@ import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -113,9 +114,9 @@ class LinkServiceImplTest {
     @Test
     void markNewCheck_thenCallLinkRepositoryMethod() {
         OffsetDateTime newLastCheckTime = OffsetDateTime.now();
-        linkService.markNewCheck(linkId, newLastCheckTime);
+        linkService.markNewCheck(List.of(linkId), newLastCheckTime);
 
-        Mockito.verify(linkRepository).markNewCheck(linkId, newLastCheckTime);
+        Mockito.verify(linkRepository).markNewCheck(List.of(linkId), newLastCheckTime);
     }
 
     @Test

@@ -74,7 +74,7 @@ public interface LinkRepository {
     /**
      * Modify updateAt link's field in db
      *
-     * @param linkId       - link to modify
+     * @param linkId       - links to modify
      * @param newUpdatedAt - new updatedAt value
      * @return number of affected rows
      */
@@ -83,9 +83,9 @@ public interface LinkRepository {
     /**
      * Updates last_check_time field in db
      *
-     * @param linkId           - link to update
+     * @param linkIds           - link to update
      * @param newLastCheckTime - new last_check_time value
      * @return number of affected rows
      */
-    int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime);
+    int markNewCheck(List<Long> linkIds, OffsetDateTime newLastCheckTime);
 }

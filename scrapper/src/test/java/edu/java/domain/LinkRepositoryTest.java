@@ -198,7 +198,7 @@ public abstract class LinkRepositoryTest extends IntegrationTest {
         String url = "url";
         LinkDto linkDto = linkRepository.add(url);
 
-        linkRepository.markNewCheck(linkDto.id(), linkDto.updatedAt().plus(Duration.ofDays(1)));
+        linkRepository.markNewCheck(List.of(linkDto.id()), linkDto.updatedAt().plus(Duration.ofDays(1)));
 
         LinkDto updatedLink = linkRepository.findByUrl(url).get();
 

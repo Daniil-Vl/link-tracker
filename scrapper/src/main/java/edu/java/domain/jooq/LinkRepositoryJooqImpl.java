@@ -169,6 +169,7 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
             .update(link)
             .set(link.UPDATED_AT, newUpdatedAt)
             .set(link.LAST_CHECK_TIME, newUpdatedAt)
+            .where(link.ID.eq(linkId))
             .execute();
 
         log.info("Jooq link repository markNewUpdate query rows affected: %s".formatted(rowsAffected));
@@ -177,10 +178,11 @@ public class LinkRepositoryJooqImpl implements LinkRepository {
     }
 
     @Override
-    public int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime) {
+    public int markNewCheck(List<Long> linkIds, OffsetDateTime newLastCheckTime) {
         int rowsAffected = dslContext
             .update(link)
             .set(link.LAST_CHECK_TIME, newLastCheckTime)
+            .where(link.ID.in(linkIds))
             .execute();
 
         log.info("Jooq link repository markNewCheck query rows affected: %s".formatted(rowsAffected));

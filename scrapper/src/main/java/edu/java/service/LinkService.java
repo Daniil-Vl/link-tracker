@@ -60,7 +60,7 @@ public interface LinkService {
      * @param newLastCheckTime - new last_check_time value
      * @return number of affected rows
      */
-    int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime);
+    int markNewCheck(List<Long> linkId, OffsetDateTime newLastCheckTime);
 
     /**
      * Return all subscribed users to a certain resource

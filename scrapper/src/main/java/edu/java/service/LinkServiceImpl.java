@@ -64,8 +64,8 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
-    public int markNewCheck(Long linkId, OffsetDateTime newLastCheckTime) {
-        return linkRepository.markNewCheck(linkId, newLastCheckTime);
+    public int markNewCheck(List<Long> linkIds, OffsetDateTime newLastCheckTime) {
+        return linkRepository.markNewCheck(linkIds, newLastCheckTime);
     }
 
     @Override
