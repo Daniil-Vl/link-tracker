@@ -24,7 +24,7 @@ public class LinkUpdaterServiceImpl implements LinkUpdaterService {
     @Override
     @Transactional
     public int update() {
-        log.info("Call update method inside LinkUpdaterImpl");
+        log.info("Try to find updates...");
 
         int numberOfProcessedUpdates = 0;
         List<LinkDto> linkDtoList = linkService.findAllOldLinks(scheduler.forceCheckDelay());
