@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.LinkUpdateRequest;
 import edu.java.bot.telegram.message.MessageSender;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,7 @@ import org.springframework.stereotype.Service;
 public class LinkUpdateHandlerImpl implements LinkUpdateHandler {
     private final MessageSender messageSender;
 
-    @Override
-    public SendResponse sendUpdateMessage(Long chatId, String url, String description) {
+    private SendResponse sendUpdateMessage(Long chatId, String url, String description) {
         return messageSender.sendMessage(new SendMessage(
             chatId,
             buildUpdateMessage(url, description)
@@ -21,13 +21,15 @@ public class LinkUpdateHandlerImpl implements LinkUpdateHandler {
     }
 
     @Override
-    public void processLinkUpdate(LinkUpdateRequest linkUpdateRequest) {
-        for (Long userId : linkUpdateRequest.ids()) {
-            sendUpdateMessage(
-                userId,
-                linkUpdateRequest.url(),
-                linkUpdateRequest.description()
-            );
+    public void processLinkUpdates(List<LinkUpdateRequest> linkUpdateRequests) {
+        for (LinkUpdateRequest linkUpdate : linkUpdateRequests) {
+            for (Long userId : linkUpdate.ids()) {
+                sendUpdateMessage(
+                    userId,
+                    linkUpdate.url(),
+                    linkUpdate.description()
+                );
+            }
         }
     }
 

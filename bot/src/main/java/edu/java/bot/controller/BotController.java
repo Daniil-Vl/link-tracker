@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,5 +30,5 @@ public interface BotController {
         )
     })
     @PostMapping("/updates")
-    String sendUpdate(@RequestBody LinkUpdateRequest linkUpdateRequest);
+    String sendUpdate(@RequestBody List<LinkUpdateRequest> linkUpdateRequest);
 }

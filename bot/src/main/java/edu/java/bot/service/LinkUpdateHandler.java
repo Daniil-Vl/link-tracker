@@ -1,10 +1,13 @@
 package edu.java.bot.service;
 
-import com.pengrad.telegrambot.response.SendResponse;
 import edu.java.LinkUpdateRequest;
+import java.util.List;
 
 public interface LinkUpdateHandler {
-    SendResponse sendUpdateMessage(Long chatId, String url, String description);
-
-    void processLinkUpdate(LinkUpdateRequest linkUpdateRequest);
+    /**
+     * Send messages about updates to the subscribed users
+     *
+     * @param linkUpdateRequest - list of links updates
+     */
+    void processLinkUpdates(List<LinkUpdateRequest> linkUpdateRequest);
 }
