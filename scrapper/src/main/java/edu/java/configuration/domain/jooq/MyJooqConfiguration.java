@@ -1,4 +1,4 @@
-package edu.java.configuration;
+package edu.java.configuration.domain.jooq;
 
 import lombok.RequiredArgsConstructor;
 import org.jooq.conf.RenderQuotedNames;

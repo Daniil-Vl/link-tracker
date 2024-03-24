@@ -1,5 +1,6 @@
 package edu.java.configuration;
 
+import edu.java.configuration.domain.AccessType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
@@ -13,6 +14,8 @@ public record ApplicationConfig(
     @Bean
     @NotNull
     Scheduler scheduler,
+    @NotNull
+    AccessType databaseAccessType,
     @NotNull
     Api api
 ) {
