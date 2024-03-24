@@ -33,11 +33,11 @@ public class BotClientImpl implements BotClient {
     }
 
     @Override
-    public String sendLinkUpdateRequest(LinkUpdateRequest linkUpdateRequest) {
+    public String sendLinkUpdateRequest(List<LinkUpdateRequest> linkUpdateRequests) {
         String response = this.webClient
             .post()
             .uri(ENDPOINT)
-            .bodyValue(linkUpdateRequest)
+            .bodyValue(linkUpdateRequests)
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,

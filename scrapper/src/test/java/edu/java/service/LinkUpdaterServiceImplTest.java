@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,7 +58,7 @@ public class LinkUpdaterServiceImplTest {
         Mockito.verify(searchersManagerService, times(0))
             .getUpdates(any(LinkDto.class));
         Mockito.verify(botClient, times(0))
-            .sendLinkUpdateRequest(any(LinkUpdateRequest.class));
+            .sendLinkUpdateRequest(anyList());
     }
 
     @Test
@@ -83,7 +84,7 @@ public class LinkUpdaterServiceImplTest {
         int processedUpdates = linkUpdaterService.update();
 
         assertThat(processedUpdates).isEqualTo(1);
-        Mockito.verify(botClient, times(1)).sendLinkUpdateRequest(linkUpdateRequest);
+        Mockito.verify(botClient, times(1)).sendLinkUpdateRequest(List.of(linkUpdateRequest));
     }
 
 }

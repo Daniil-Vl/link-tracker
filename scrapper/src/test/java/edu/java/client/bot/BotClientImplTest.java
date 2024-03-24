@@ -25,12 +25,12 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenValidLinkUpdate_whenSendRequest_thenStatusOk() {
-        LinkUpdateRequest requestBody = new LinkUpdateRequest(
+        List<LinkUpdateRequest> requestBody = List.of(new LinkUpdateRequest(
             1L,
             "url",
             "description",
             List.of(1L, 2L)
-        );
+        ));
         String expectedResponseBody = "Обновление обработано";
 
         server.stubFor(
@@ -45,12 +45,12 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidLinkUpdate_whenSendRequest_thenThrowIllegalArgumentException() throws JsonProcessingException {
-        LinkUpdateRequest requestBody = new LinkUpdateRequest(
+        List<LinkUpdateRequest> requestBody = List.of(new LinkUpdateRequest(
             -1L,
             "url",
             "description",
             List.of(1L, 2L)
-        );
+        ));
         ApiErrorResponse errorResponse = new ApiErrorResponse(
             "Invalid argument in the request body",
             "400",
