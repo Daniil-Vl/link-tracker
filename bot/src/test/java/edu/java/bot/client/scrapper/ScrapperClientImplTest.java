@@ -38,7 +38,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenId_whenRegisterChat_thenReturnOk() {
-        Integer chatId = 1;
+        Long chatId = 1L;
         String expectedResponseBody = "Chat has been successfully registered";
 
         server.stubFor(
@@ -58,7 +58,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidId_whenRegisterChat_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = -1;
+        Long chatId = -1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "400",
@@ -83,7 +83,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenId_whenDeleteChat_thenReturnOk() {
-        Integer chatId = 1;
+        Long chatId = 1L;
         String expectedResponseBody = "Chat has been successfully removed";
 
         server.stubFor(
@@ -103,7 +103,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidId_whenDeleteChat_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "400",
@@ -128,7 +128,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenNonExistentId_whenDeleteChat_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "404",
@@ -153,9 +153,9 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenId_whenGetLinks_thenReturnOk() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         ListLinksResponse expectedResponse = new ListLinksResponse(
-            List.of(new ListLinksResponse.LinkResponse(1, URI.create("url"))),
+            List.of(new LinkResponse(1L, URI.create("url"))),
             1
         );
 
@@ -177,7 +177,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidId_whenGetLinks_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = -1;
+        Long chatId = -1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "400",
@@ -203,7 +203,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenNonExistentId_whenGetLinks_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "404",
@@ -229,9 +229,9 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenId_whenAddLink_ThenReturnOk() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         URI url = URI.create("url");
-        LinkResponse expectedResponse = new LinkResponse(1, url);
+        LinkResponse expectedResponse = new LinkResponse(1L, url);
         AddLinkRequest addLinkRequest = new AddLinkRequest(url);
 
         server.stubFor(
@@ -253,7 +253,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidId_whenAddLink_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         URI url = URI.create("url");
         AddLinkRequest addLinkRequest = new AddLinkRequest(url);
         ApiErrorResponse response = new ApiErrorResponse(
@@ -282,9 +282,9 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenId_whenDeleteLinks_thenReturnOk() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         URI url = URI.create("url");
-        LinkResponse expectedResponse = new LinkResponse(1, url);
+        LinkResponse expectedResponse = new LinkResponse(1L, url);
         RemoveLinkRequest removeLinkRequest = new RemoveLinkRequest(url);
 
         server.stubFor(
@@ -306,7 +306,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidId_whenDeleteLinks_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = -1;
+        Long chatId = -1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "400",
@@ -335,7 +335,7 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenNonExistentId_whenDeleteLinks_thenThrowApiErrorException() throws JsonProcessingException {
-        Integer chatId = 1;
+        Long chatId = 1L;
         ApiErrorResponse response = new ApiErrorResponse(
             "description",
             "404",

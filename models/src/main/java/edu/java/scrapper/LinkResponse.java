@@ -7,7 +7,7 @@ import java.net.URI;
 public record LinkResponse(
     @JsonProperty("id")
     @PositiveOrZero(message = "Id must be non-negative")
-    Integer id,
+    Long id,
     @JsonProperty("url")
     URI url
 ) {

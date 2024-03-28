@@ -13,11 +13,6 @@ public class MessageSenderImpl implements MessageSender {
     private final Bot bot;
 
     @Override
-    public SendResponse sendMessage(BotMessage botMessage) {
-        return bot.sendMessage(new SendMessage(botMessage.userId(), botMessage.text()));
-    }
-
-    @Override
     public SendResponse sendMessage(SendMessage sendMessage) {
         return bot.sendMessage(sendMessage);
     }

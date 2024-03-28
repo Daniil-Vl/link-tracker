@@ -3,7 +3,6 @@ package edu.java.bot.telegram.commands;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
 
 public interface Command {
     String command();
@@ -12,7 +11,7 @@ public interface Command {
 
     String helpMessage();
 
-    SendMessage handle(Update update) throws UserNotFoundException;
+    SendMessage handle(Update update);
 
     default boolean supports(Update update) {
         return update

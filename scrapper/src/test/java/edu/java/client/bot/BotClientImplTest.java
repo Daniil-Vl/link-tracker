@@ -3,7 +3,7 @@ package edu.java.client.bot;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.ApiErrorResponse;
-import edu.java.LinkUpdate;
+import edu.java.LinkUpdateRequest;
 import edu.java.client.AbstractClientServerTest;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -25,12 +25,12 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenValidLinkUpdate_whenSendRequest_thenStatusOk() {
-        LinkUpdate requestBody = new LinkUpdate(
-            1,
+        List<LinkUpdateRequest> requestBody = List.of(new LinkUpdateRequest(
+            1L,
             "url",
             "description",
-            List.of(1, 2)
-        );
+            List.of(1L, 2L)
+        ));
         String expectedResponseBody = "Обновление обработано";
 
         server.stubFor(
@@ -45,12 +45,12 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Test
     void givenInvalidLinkUpdate_whenSendRequest_thenThrowIllegalArgumentException() throws JsonProcessingException {
-        LinkUpdate requestBody = new LinkUpdate(
-            -1,
+        List<LinkUpdateRequest> requestBody = List.of(new LinkUpdateRequest(
+            -1L,
             "url",
             "description",
-            List.of(1, 2)
-        );
+            List.of(1L, 2L)
+        ));
         ApiErrorResponse errorResponse = new ApiErrorResponse(
             "Invalid argument in the request body",
             "400",

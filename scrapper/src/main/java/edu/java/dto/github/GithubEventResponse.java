@@ -11,7 +11,7 @@ public record GithubEventResponse(
     Actor actor,
     Repo repo,
     @JsonProperty("created_at")
-    OffsetDateTime createdAt
+    OffsetDateTime updatedAt
 ) {
     public record Actor(Long id, String login) {
     }

@@ -2,10 +2,11 @@ package edu.java.bot.telegram.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.telegram.links.Link;
+import edu.java.bot.client.scrapper.ScrapperClient;
 import edu.java.bot.telegram.message.ReplyMessages;
-import edu.java.bot.telegram.persistence.ResourceDB;
-import edu.java.bot.telegram.persistence.exceptions.UserNotFoundException;
+import edu.java.exceptions.ApiErrorException;
+import edu.java.scrapper.LinkResponse;
+import edu.java.scrapper.ListLinksResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class ListCommand implements Command {
-    private final ResourceDB resourceDB;
+    private final ScrapperClient scrapperClient;
 
     @Override
     public String command() {
@@ -32,28 +33,40 @@ public class ListCommand implements Command {
         return "help message for /list";
     }
 
-    private String buildListMessage(List<Link> trackedResources) {
+    private String buildListMessage(List<LinkResponse> trackedResources) {
         StringBuilder replyMessageBuilder = new StringBuilder();
-        replyMessageBuilder.append("List of your tracked resources: \n");
+        replyMessageBuilder.append("List of your tracked resources:\n");
 
         for (int ind = 0; ind < trackedResources.size(); ind++) {
-            Link link = trackedResources.get(ind);
-            replyMessageBuilder.append("%d) %s\n".formatted(ind + 1, link.url().toString()));
+            LinkResponse linkResponse = trackedResources.get(ind);
+            replyMessageBuilder.append("%d) %s\n".formatted(ind + 1, linkResponse.url().toString()));
         }
 
         return replyMessageBuilder.toString();
     }
 
     @Override
-    public SendMessage handle(Update update) throws UserNotFoundException {
+    public SendMessage handle(Update update) {
         long userId = update.message().chat().id();
 
-        List<Link> trackedResources = resourceDB.getTrackedResources(userId);
+        ListLinksResponse links;
+        try {
+            links = scrapperClient.getLinks(userId);
+        } catch (ApiErrorException e) {
+            log.warn("Catch ApiErrorException");
+            return new SendMessage(
+                userId,
+                e.getMessage()
+            );
+        }
 
-        if (trackedResources.isEmpty()) {
+        if (links.links().isEmpty()) {
             return new SendMessage(userId, ReplyMessages.EMPTY_RESOURCE_LIST.getText());
         }
 
-        return new SendMessage(userId, buildListMessage(trackedResources));
+        return new SendMessage(
+            userId,
+            buildListMessage(links.links())
+        );
     }
 }

@@ -1,7 +1,7 @@
 package edu.java.client.bot;
 
 import edu.java.ApiErrorResponse;
-import edu.java.LinkUpdate;
+import edu.java.LinkUpdateRequest;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -33,11 +33,11 @@ public class BotClientImpl implements BotClient {
     }
 
     @Override
-    public String sendLinkUpdateRequest(LinkUpdate linkUpdate) {
+    public String sendLinkUpdateRequest(List<LinkUpdateRequest> linkUpdateRequests) {
         String response = this.webClient
             .post()
             .uri(ENDPOINT)
-            .bodyValue(linkUpdate)
+            .bodyValue(linkUpdateRequests)
             .retrieve()
             .onStatus(
                 HttpStatus.BAD_REQUEST::equals,

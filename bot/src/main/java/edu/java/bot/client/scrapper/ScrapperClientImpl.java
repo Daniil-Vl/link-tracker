@@ -53,7 +53,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     }
 
     @Override
-    public String registerChat(Integer id) {
+    public String registerChat(Long id) {
         log.info("Register chat request starts");
         String endpoint = TG_CHAT_ENDPOINT.formatted(id);
 
@@ -69,7 +69,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     }
 
     @Override
-    public String deleteChat(Integer id) {
+    public String deleteChat(Long id) {
         log.info("Delete chat request starts");
         String endpoint = TG_CHAT_ENDPOINT.formatted(id);
 
@@ -85,7 +85,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     }
 
     @Override
-    public ListLinksResponse getLinks(Integer tgChatId) {
+    public ListLinksResponse getLinks(Long tgChatId) {
         log.info("Get links request starts");
 
         ListLinksResponse response = webClient
@@ -101,7 +101,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     }
 
     @Override
-    public LinkResponse addLink(Integer tgChatId, URI link) {
+    public LinkResponse addLink(Long tgChatId, URI link) {
         log.info("Add link request starts");
         AddLinkRequest body = new AddLinkRequest(link);
 
@@ -119,7 +119,7 @@ public class ScrapperClientImpl implements ScrapperClient {
     }
 
     @Override
-    public LinkResponse deleteLink(Integer tgChatId, RemoveLinkRequest removeLinkRequest) {
+    public LinkResponse deleteLink(Long tgChatId, RemoveLinkRequest removeLinkRequest) {
         log.info("Delete link request starts");
 
         LinkResponse response = webClient

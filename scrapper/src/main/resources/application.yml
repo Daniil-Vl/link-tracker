@@ -2,7 +2,7 @@ app:
   scheduler:
     enable: true
     interval: 10s
-    force-check-delay: 10s
+    force-check-delay: 1m
 
   api:
     bot:
@@ -14,8 +14,16 @@ app:
       base-url: https://api.stackexchange.com
 
 spring:
+  devtools:
+    restart:
+      enabled: false
   application:
     name: scrapper
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/scrapper
+    username: postgres
+    password: postgres
 
 server:
   port: 8080
@@ -26,4 +34,3 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
-

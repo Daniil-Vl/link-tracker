@@ -16,12 +16,6 @@ public class UpdateHandlerImpl implements UpdateHandler {
     private final UserMessageProcessor userMessageProcessor;
     private final MessageSender messageSender;
 
-    /**
-     * If the user passed command, then bot will try to execute this
-     * Otherwise reply with the predefined message of unsupported command
-     *
-     * @param update - update, that will be processed
-     */
     @Override
     public void handleUpdate(Update update) {
         long userId = update.message().chat().id();
