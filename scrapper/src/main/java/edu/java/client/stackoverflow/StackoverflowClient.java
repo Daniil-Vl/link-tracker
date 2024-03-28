@@ -1,5 +1,6 @@
 package edu.java.client.stackoverflow;
 
+import edu.java.dto.stackoverflow.StackoverflowQuestionAnswersResponse;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
 
 public interface StackoverflowClient {
@@ -10,4 +11,6 @@ public interface StackoverflowClient {
      * @return record containing question id, question title, and last activity date
      */
     StackoverflowQuestionResponse getQuestion(Long questionId);
+
+    StackoverflowQuestionAnswersResponse getAnswers(Long questionId);
 }
