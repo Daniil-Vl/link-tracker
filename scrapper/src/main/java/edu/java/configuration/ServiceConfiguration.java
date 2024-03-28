@@ -22,28 +22,21 @@ public class ServiceConfiguration {
     private final LinkRepository linkRepositoryJdbcImpl;
     private final SubscriptionRepository subscriptionRepositoryJdbcImpl;
 
-    private final ChatRepository chatRepositoryJooqImpl;
-    private final LinkRepository linkRepositoryJooqImpl;
-    private final SubscriptionRepository subscriptionRepositoryJooqImpl;
-
     private final ApplicationConfig.Scheduler scheduler;
     private final BotClient botClient;
 
     @Bean
     public TgChatService tgChatService() {
         return new TgChatServiceImpl(
-//            chatRepositoryJdbcImpl
-            chatRepositoryJooqImpl
+            chatRepositoryJdbcImpl
         );
     }
 
     @Bean
     public LinkService linkService(TgChatService tgChatService) {
         return new LinkServiceImpl(
-//            linkRepositoryJdbcImpl,
-            linkRepositoryJooqImpl,
-//            subscriptionRepositoryJdbcImpl,
-            subscriptionRepositoryJooqImpl,
+            linkRepositoryJdbcImpl,
+            subscriptionRepositoryJdbcImpl,
             tgChatService
         );
     }
