@@ -55,7 +55,7 @@ class GithubLinkUpdateSearcherTest {
             new LinkUpdate(
                 1L,
                 url.toString(),
-                "New commit"
+                "New Update"
             )
         );
 
