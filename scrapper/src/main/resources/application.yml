@@ -1,5 +1,5 @@
 app:
-  database-access-type: jdbc
+  database-access-type: jpa
 
   scheduler:
     enable: true
@@ -26,6 +26,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/scrapper
     username: postgres
     password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
 
 server:
   port: 8080
