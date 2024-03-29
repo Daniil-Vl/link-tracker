@@ -14,7 +14,9 @@ public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
     @NotNull
-    Api api
+    Api api,
+    @NotNull
+    RateLimit rateLimit
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -28,5 +30,9 @@ public record ApplicationConfig(
 
         public record Stackoverflow(@NotBlank String baseUrl) {
         }
+
+    }
+
+    public record RateLimit(Long capacity, Long refillRate, Long refillTimeSeconds) {
     }
 }

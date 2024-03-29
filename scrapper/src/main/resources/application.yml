@@ -13,6 +13,11 @@ app:
     stackoverflow:
       base-url: https://api.stackexchange.com
 
+  rate-limit:
+    capacity: 10
+    refill-rate: 1
+    refill-time-seconds: 10
+
 spring:
   devtools:
     restart:
