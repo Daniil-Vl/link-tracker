@@ -3,12 +3,16 @@ package edu.java.client.stackoverflow;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
+import edu.java.retrying.RetryFilter;
+import edu.java.retrying.backoff.ConstantBackoff;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +33,14 @@ class StackoverflowClientImplTest {
     void init() {
         server = new WireMockServer();
         server.start();
-        stackoverflowClient = new StackoverflowClientImpl(server.baseUrl());
+        stackoverflowClient = new StackoverflowClientImpl(
+            server.baseUrl(),
+            new RetryFilter(
+                new ConstantBackoff(Duration.ZERO),
+                Set.of(),
+                0
+            )
+        );
     }
 
     @AfterEach
