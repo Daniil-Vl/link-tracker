@@ -14,9 +14,9 @@ app:
       base-url: https://api.stackexchange.com
 
   rate-limit:
-    capacity: 10
-    refill-rate: 1
-    refill-time-seconds: 10
+    capacity: 100
+    refill-rate: 100
+    refill-time-seconds: 3600
 
 spring:
   devtools:

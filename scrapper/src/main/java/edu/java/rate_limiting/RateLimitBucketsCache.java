@@ -6,20 +6,19 @@ import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
 import jakarta.annotation.PostConstruct;
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class RateLimitBucketsCache {
     private final ApplicationConfig.RateLimit rateLimit;
-    private Map<String, Bucket> cache = new ConcurrentHashMap<>();
     private Bandwidth basicBandwidth;
 
+    @Cacheable(value = "rate-limit-buckets-cache", key = "#root.args[0]")
     public Bucket getBucket(String ip) {
-        return cache.computeIfAbsent(ip, address -> buildNewBucket());
+        return buildNewBucket();
     }
 
     @PostConstruct
