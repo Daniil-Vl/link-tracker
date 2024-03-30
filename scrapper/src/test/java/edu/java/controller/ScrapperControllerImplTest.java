@@ -13,6 +13,7 @@ import edu.java.scrapper.RemoveLinkRequest;
 import edu.java.service.LinkService;
 import edu.java.service.TgChatService;
 import java.net.URI;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -339,7 +340,8 @@ class ScrapperControllerImplTest {
                 100L,
                 100L,
                 1L,
-                100L
+                100L,
+                Duration.ofHours(2)
             ));
         }
     }

@@ -38,7 +38,12 @@ public record ApplicationConfig(
 
     }
 
-    public record RateLimit(Long capacity, Long refillRate, Long refillTimeSeconds, Long cacheSize, Duration expireAfterAccess) {
+    public record RateLimit(
+        Long capacity,
+        Long refillRate,
+        Long refillTimeSeconds,
+        Long cacheSize,
+        Duration expireAfterAccess) {
     }
 
     public record Retry(Bot bot, Github github, Stackoverflow stackoverflow) {
