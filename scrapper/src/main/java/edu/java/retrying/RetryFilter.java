@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class RetryFilter implements ExchangeFilterFunction {
     private final Backoff backoff;
-    private final Set<HttpStatus> httpStatuses;
+    private final Set<HttpStatus> errorHttpStatuses;
     private final int maxAttempts;
 
     @Override
@@ -28,7 +28,7 @@ public class RetryFilter implements ExchangeFilterFunction {
             .flatMap(clientResponse -> {
                 HttpStatus httpStatusCode = (HttpStatus) clientResponse.statusCode();
 
-                if (httpStatuses.contains(httpStatusCode) && attempt <= maxAttempts) {
+                if (errorHttpStatuses.contains(httpStatusCode) && attempt <= maxAttempts) {
                     Duration waitTime = backoff.calculateWaitTime(attempt);
                     Mono<ClientResponse> defer = Mono.defer(() -> retry(request, next, attempt + 1));
                     return Mono.delay(waitTime).then(defer);
