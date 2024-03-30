@@ -1,7 +1,7 @@
 package edu.java.configuration.cache;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import java.util.concurrent.TimeUnit;
+import edu.java.configuration.ApplicationConfig;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
@@ -10,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CaffeineConfiguration {
     @Bean
-    public Caffeine caffeineConfig() {
+    public Caffeine caffeineConfig(ApplicationConfig applicationConfig) {
         return Caffeine.newBuilder()
-            .expireAfterAccess(2, TimeUnit.HOURS)
-            .maximumSize(10_000);
+            .expireAfterAccess(applicationConfig.rateLimit().expireAfterAccess())
+            .maximumSize(applicationConfig.rateLimit().cacheSize());
     }
 
     @Bean

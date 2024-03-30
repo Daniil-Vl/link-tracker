@@ -17,6 +17,8 @@ app:
     capacity: 100
     refill-rate: 100
     refill-time-seconds: 3600
+    cache-size: 10_000
+    expire-after-access: 2h
 
 spring:
   devtools:

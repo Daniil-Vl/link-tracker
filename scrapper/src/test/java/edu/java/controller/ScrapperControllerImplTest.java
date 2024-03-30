@@ -338,7 +338,8 @@ class ScrapperControllerImplTest {
             return new RateLimitBucketsCache(new ApplicationConfig.RateLimit(
                 100L,
                 100L,
-                1L
+                1L,
+                100L
             ));
         }
     }
