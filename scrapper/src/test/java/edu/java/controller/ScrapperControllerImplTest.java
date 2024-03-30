@@ -1,9 +1,11 @@
 package edu.java.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.java.configuration.ApplicationConfig;
 import edu.java.dto.dao.LinkDto;
 import edu.java.exceptions.ChatNotExistException;
 import edu.java.exceptions.LinkNotExistException;
+import edu.java.rate_limiting.RateLimitBucketsCache;
 import edu.java.scrapper.AddLinkRequest;
 import edu.java.scrapper.LinkResponse;
 import edu.java.scrapper.ListLinksResponse;
@@ -17,7 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.containsString;
@@ -325,6 +329,18 @@ class ScrapperControllerImplTest {
                 .map(linkDto -> new LinkResponse(linkDto.id(), linkDto.url()))
                 .toList();
         return new ListLinksResponse(linkResponses, linkResponses.size());
+    }
+
+    @TestConfiguration
+    static class ScrapperControllerImplTestConfig {
+        @Bean
+        public RateLimitBucketsCache rateLimitBucketsCache() {
+            return new RateLimitBucketsCache(new ApplicationConfig.RateLimit(
+                100L,
+                100L,
+                1L
+            ));
+        }
     }
 
 }

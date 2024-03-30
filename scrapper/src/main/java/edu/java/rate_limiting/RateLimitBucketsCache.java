@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RateLimitBucketsCache {
-    private final ApplicationConfig applicationConfig;
+    private final ApplicationConfig.RateLimit rateLimit;
     private Map<String, Bucket> cache = new ConcurrentHashMap<>();
     private Bandwidth basicBandwidth;
 
@@ -25,10 +25,10 @@ public class RateLimitBucketsCache {
     @PostConstruct
     void initBandWidth() {
         basicBandwidth = Bandwidth.classic(
-            applicationConfig.rateLimit().capacity(),
+            rateLimit.capacity(),
             Refill.greedy(
-                applicationConfig.rateLimit().refillRate(),
-                Duration.ofSeconds(applicationConfig.rateLimit().refillTimeSeconds())
+                rateLimit.refillRate(),
+                Duration.ofSeconds(rateLimit.refillTimeSeconds())
             )
         );
     }
