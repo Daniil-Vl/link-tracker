@@ -2,6 +2,7 @@ package edu.java.configuration;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,9 @@ public record ApplicationConfig(
     @NotNull
     Scheduler scheduler,
     @NotNull
-    Api api
+    Api api,
+    @NotNull
+    Kafka kafka
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }
@@ -28,5 +31,18 @@ public record ApplicationConfig(
 
         public record Stackoverflow(@NotBlank String baseUrl) {
         }
+    }
+
+    public record Kafka(
+        @NotBlank
+        String bootstrapServers,
+        @NotBlank
+        String groupId,
+        @NotBlank
+        String topicName,
+        @Positive
+        Integer partitions,
+        @Positive
+        Integer replicationFactor) {
     }
 }

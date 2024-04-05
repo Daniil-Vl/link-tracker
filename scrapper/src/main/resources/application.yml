@@ -13,6 +13,13 @@ app:
     stackoverflow:
       base-url: https://api.stackexchange.com
 
+  kafka:
+    topic-name: "topic1"
+    partitions: 3
+    replication-factor: 1
+    bootstrap-servers: localhost:9092
+    group-id: "instance.one"
+
 spring:
   devtools:
     restart:
