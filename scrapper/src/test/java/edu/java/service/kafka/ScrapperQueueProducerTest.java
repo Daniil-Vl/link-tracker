@@ -29,18 +29,9 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.utility.DockerImageName;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ScrapperQueueProducerTest extends IntegrationTest {
-    @Container
-    public static KafkaContainer kafka = new KafkaContainer(
-        DockerImageName.parse("confluentinc/cp-kafka:7.3.2")
-    );
 
     @Autowired
     private ScrapperQueueProducer producer;
@@ -48,17 +39,9 @@ class ScrapperQueueProducerTest extends IntegrationTest {
     @Autowired
     private KafkaTestConsumer consumer;
 
-    @DynamicPropertySource
-    static void kafkaProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
-        registry.add("app.kafka.bootstrap-servers", kafka::getBootstrapServers);
-        registry.add("app.kafka.topic-name", () -> "test-topic");
-        registry.add("app.kafka.group-id", () -> "test-group-id");
-    }
-
     @Test
     void testKafkaContainerIsRunning() {
-        assertThat(kafka.isRunning()).isTrue();
+        assertThat(KAFKA.isRunning()).isTrue();
     }
 
     @Test
@@ -91,7 +74,7 @@ class ScrapperQueueProducerTest extends IntegrationTest {
             Map<String, Object> props = new HashMap<>();
             props.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                kafka.getBootstrapServers()
+                KAFKA.getBootstrapServers()
             );
             props.put(
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,

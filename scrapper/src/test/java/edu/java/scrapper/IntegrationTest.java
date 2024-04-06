@@ -6,13 +6,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 @SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 public abstract class IntegrationTest {
-
+    protected static KafkaContainer KAFKA = new KafkaContainer(
+        DockerImageName.parse("confluentinc/cp-kafka:7.3.2")
+    );
     protected static PostgreSQLContainer<?> POSTGRES;
 
     static {
@@ -21,6 +25,8 @@ public abstract class IntegrationTest {
             .withUsername("postgres")
             .withPassword("postgres");
         POSTGRES.start();
+
+        KAFKA.start();
     }
 
     @Autowired
@@ -41,6 +47,14 @@ public abstract class IntegrationTest {
     @DynamicPropertySource
     static void schedulerProperties(DynamicPropertyRegistry registry) {
         registry.add("app.scheduler.enable", () -> false);
+    }
+
+    @DynamicPropertySource
+    static void kafkaProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.kafka.bootstrap-servers", KAFKA::getBootstrapServers);
+        registry.add("app.kafka.bootstrap-servers", KAFKA::getBootstrapServers);
+        registry.add("app.kafka.topic-name", () -> "test-topic");
+        registry.add("app.kafka.group-id", () -> "test-group-id");
     }
 
     @BeforeEach
