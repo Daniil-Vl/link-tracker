@@ -1,6 +1,12 @@
 app:
   telegram-token: ${TELEGRAM-TOKEN}
   scrapper-base-url: http://localhost:8080
+  kafka:
+    topic-name: "topic1"
+    partitions: 3
+    replication-factor: 1
+    bootstrap-servers: localhost:9092
+    group-id: "instance.one"
 
 spring:
   application:
