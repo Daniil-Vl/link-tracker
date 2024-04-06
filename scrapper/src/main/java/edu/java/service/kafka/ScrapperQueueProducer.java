@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class ScrapperQueueProducer {
     private final KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate;
     private final ApplicationConfig applicationConfig;
-//    private final LinkService linkService;
 
     public void send(LinkUpdate linkUpdate, List<Long> subscribers) {
         LinkUpdateRequest request = new LinkUpdateRequest(
@@ -21,7 +20,6 @@ public class ScrapperQueueProducer {
             linkUpdate.url(),
             linkUpdate.description(),
             subscribers
-//            linkService.getAllSubscribers(linkUpdate.id())
         );
 
         kafkaTemplate.send(
