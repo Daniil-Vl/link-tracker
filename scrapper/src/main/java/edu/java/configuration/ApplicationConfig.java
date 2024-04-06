@@ -17,7 +17,9 @@ public record ApplicationConfig(
     @NotNull
     Api api,
     @NotNull
-    Kafka kafka
+    Kafka kafka,
+    @NotNull
+    Boolean useQueue
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

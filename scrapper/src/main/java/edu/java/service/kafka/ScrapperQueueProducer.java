@@ -3,7 +3,7 @@ package edu.java.service.kafka;
 import edu.java.LinkUpdateRequest;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.dto.LinkUpdate;
-import edu.java.service.LinkService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -13,14 +13,15 @@ import org.springframework.stereotype.Service;
 public class ScrapperQueueProducer {
     private final KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate;
     private final ApplicationConfig applicationConfig;
-    private final LinkService linkService;
+//    private final LinkService linkService;
 
-    public void send(LinkUpdate linkUpdate) {
+    public void send(LinkUpdate linkUpdate, List<Long> subscribers) {
         LinkUpdateRequest request = new LinkUpdateRequest(
-            linkUpdate.id(),
+            linkUpdate.linkId(),
             linkUpdate.url(),
             linkUpdate.description(),
-            linkService.getAllSubscribers(linkUpdate.id())
+            subscribers
+//            linkService.getAllSubscribers(linkUpdate.id())
         );
 
         kafkaTemplate.send(

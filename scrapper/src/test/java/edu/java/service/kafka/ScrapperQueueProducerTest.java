@@ -5,6 +5,7 @@ import edu.java.configuration.ApplicationConfig;
 import edu.java.dto.LinkUpdate;
 import edu.java.scrapper.IntegrationTest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -68,13 +69,13 @@ class ScrapperQueueProducerTest extends IntegrationTest {
             "description"
         );
 
-        producer.send(linkUpdate);
+        producer.send(linkUpdate, List.of());
 
         boolean messageConsumed = consumer.getLatch().await(10, TimeUnit.SECONDS);
         LinkUpdateRequest payload = consumer.getPayload();
 
         assertThat(messageConsumed).isTrue();
-        assertThat(payload.id()).isEqualTo(linkUpdate.id());
+        assertThat(payload.id()).isEqualTo(linkUpdate.linkId());
         assertThat(payload.url()).isEqualTo(linkUpdate.url());
         assertThat(payload.description()).isEqualTo(linkUpdate.description());
     }

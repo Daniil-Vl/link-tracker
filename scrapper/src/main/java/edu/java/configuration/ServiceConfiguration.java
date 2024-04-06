@@ -10,6 +10,7 @@ import edu.java.service.LinkUpdaterService;
 import edu.java.service.LinkUpdaterServiceImpl;
 import edu.java.service.TgChatService;
 import edu.java.service.TgChatServiceImpl;
+import edu.java.service.kafka.ScrapperQueueProducer;
 import edu.java.service.link_update_searching.SearchersManagerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,9 +22,6 @@ public class ServiceConfiguration {
     private final ChatRepository chatRepositoryJdbcImpl;
     private final LinkRepository linkRepositoryJdbcImpl;
     private final SubscriptionRepository subscriptionRepositoryJdbcImpl;
-
-    private final ApplicationConfig.Scheduler scheduler;
-    private final BotClient botClient;
 
     @Bean
     public TgChatService tgChatService() {
@@ -44,14 +42,17 @@ public class ServiceConfiguration {
     @Bean
     public LinkUpdaterService linkUpdaterService(
         LinkService linkService,
-        SearchersManagerService searchersManagerService
+        BotClient botClient,
+        SearchersManagerService searchersManagerService,
+        ApplicationConfig applicationConfig,
+        ScrapperQueueProducer queueProducer
     ) {
         return new LinkUpdaterServiceImpl(
+            applicationConfig,
             linkService,
-            scheduler,
-//            linkRepositoryJdbcImpl,
+            searchersManagerService,
             botClient,
-            searchersManagerService
+            queueProducer
         );
     }
 }
