@@ -10,8 +10,9 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-@SpringBootTest
+@SpringBootTest(properties = "spring.main.allow-bean-definition-overriding=true")
 public abstract class IntegrationTest {
+
     protected static PostgreSQLContainer<?> POSTGRES;
 
     static {
