@@ -7,26 +7,31 @@ import edu.java.bot.telegram.bot.Bot;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import org.springframework.messaging.handler.annotation.Payload;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
@@ -41,8 +46,20 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
     @MockBean
     private LinkUpdateHandler linkUpdateHandler;
 
+    @SpyBean
+    private LinkUpdateKafkaListener listener;
+
+    @Autowired
+    private DltConsumer dltConsumer;
+
+    // Mock Bot dean to prevent request sending to telegram api
     @MockBean
     private Bot bot;
+
+    @BeforeEach
+    void resetConsumerLatch() {
+        dltConsumer.resetLatch();
+    }
 
     void sendRequest(LinkUpdateRequest linkUpdateRequest)
         throws ExecutionException, InterruptedException, TimeoutException {
@@ -53,16 +70,58 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
     }
 
     @Test
-    void testMessageReceiving() throws ExecutionException, InterruptedException, TimeoutException {
+    void givenValidMessage_whenListen_thenProcessLinkUpdate()
+        throws ExecutionException, InterruptedException, TimeoutException {
+        LinkUpdateRequest linkUpdateRequest = new LinkUpdateRequest(
+            1L,
+            "url",
+            "description",
+            List.of(1L)
+        );
+        sendRequest(linkUpdateRequest);
+
+        verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdates(List.of(linkUpdateRequest));
+    }
+
+    @Test
+    void givenInvalidMessage_whenListen_thenSendMessageToDeadLetterQueue()
+        throws ExecutionException, InterruptedException, TimeoutException {
         LinkUpdateRequest linkUpdateRequest = new LinkUpdateRequest(
             1L,
             "url",
             "description",
             List.of()
         );
-        sendRequest(linkUpdateRequest);
 
-        verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdates(List.of(linkUpdateRequest));
+        sendRequest(linkUpdateRequest);
+        boolean messageConsumed = dltConsumer.getLatch().await(10, TimeUnit.SECONDS);
+        LinkUpdateRequest payload = dltConsumer.getPayload();
+
+        verify(linkUpdateHandler, never()).processLinkUpdates(List.of(linkUpdateRequest));
+        assertThat(messageConsumed).isTrue();
+        assertThat(payload).isEqualTo(linkUpdateRequest);
+    }
+
+    @Test
+    void givenValidMessage_whenListenThrowException_thenSendMessageToDeadLetterQueue()
+        throws ExecutionException, InterruptedException, TimeoutException {
+        LinkUpdateRequest linkUpdateRequest = new LinkUpdateRequest(
+            1L,
+            "url",
+            "description",
+            List.of(1L)
+        );
+        doThrow(RuntimeException.class)
+            .when(linkUpdateHandler)
+            .processLinkUpdates(List.of(linkUpdateRequest));
+
+        sendRequest(linkUpdateRequest);
+        boolean messageConsumed = dltConsumer.getLatch().await(10, TimeUnit.SECONDS);
+        LinkUpdateRequest payload = dltConsumer.getPayload();
+
+        verify(linkUpdateHandler).processLinkUpdates(List.of(linkUpdateRequest));
+        assertThat(messageConsumed).isTrue();
+        assertThat(payload).isEqualTo(linkUpdateRequest);
     }
 
     @TestConfiguration
@@ -71,36 +130,11 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
         private final ApplicationConfig applicationConfig;
 
         @Bean
-        public ProducerFactory<String, LinkUpdateRequest> producerFactory() {
-            Map<String, Object> props = new HashMap<>();
-            props.put(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                KAFKA.getBootstrapServers()
-            );
-            props.put(
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class
-            );
-            props.put(
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class
-            );
-            return new DefaultKafkaProducerFactory<>(props);
-        }
-
-        @Bean
-        public KafkaTemplate<String, LinkUpdateRequest> kafkaTemplate(
-            ProducerFactory<String, LinkUpdateRequest> producerFactory
-        ) {
-            return new KafkaTemplate<>(producerFactory);
-        }
-
-        @Bean
         public ConsumerFactory<String, LinkUpdateRequest> consumerFactory() {
             Map<String, Object> props = new HashMap<>();
             props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                KAFKA.getBootstrapServers()
+                applicationConfig.kafka().bootstrapServers()
             );
             props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
@@ -115,6 +149,29 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
                 new StringDeserializer(),
                 new JsonDeserializer<>(LinkUpdateRequest.class)
             );
+        }
+
+        @Bean
+        public DltConsumer kafkaTestConsumer() {
+            return new DltConsumer();
+        }
+    }
+
+    @Log4j2
+    @Getter
+    public static class DltConsumer {
+        private CountDownLatch latch = new CountDownLatch(1);
+        private LinkUpdateRequest payload;
+
+        @KafkaListener(topics = "test-topic_dlq", containerFactory = "kafkaListenerContainerFactory")
+        public void listen(@Payload LinkUpdateRequest request) {
+            log.info("Received kafka dead message with payload = {} in KafkaTestConsumer", request);
+            payload = request;
+            latch.countDown();
+        }
+
+        public void resetLatch() {
+            latch = new CountDownLatch(1);
         }
     }
 }
