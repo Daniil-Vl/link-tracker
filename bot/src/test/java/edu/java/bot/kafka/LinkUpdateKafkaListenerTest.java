@@ -76,7 +76,6 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
         );
         sendRequest(linkUpdateRequest);
 
-//        verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdates(List.of(linkUpdateRequest));
         verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdate(linkUpdateRequest);
     }
 
