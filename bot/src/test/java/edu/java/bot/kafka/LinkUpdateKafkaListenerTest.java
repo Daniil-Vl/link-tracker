@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.ConsumerFactory;
@@ -45,9 +44,6 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
 
     @MockBean
     private LinkUpdateHandler linkUpdateHandler;
-
-    @SpyBean
-    private LinkUpdateKafkaListener listener;
 
     @Autowired
     private DltConsumer dltConsumer;
