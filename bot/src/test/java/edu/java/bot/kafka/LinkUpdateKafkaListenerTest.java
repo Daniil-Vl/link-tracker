@@ -159,7 +159,7 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
         private CountDownLatch latch = new CountDownLatch(1);
         private LinkUpdateRequest payload;
 
-        @KafkaListener(topics = "test-topic_dlq", containerFactory = "kafkaListenerContainerFactory")
+        @KafkaListener(topics = "${app.kafka.topic-name}_dlq", containerFactory = "kafkaListenerContainerFactory")
         public void listen(@Payload LinkUpdateRequest request) {
             log.info("Received kafka dead message with payload = {} in KafkaTestConsumer", request);
             payload = request;
