@@ -16,7 +16,7 @@ app:
   use-queue: false
 
   kafka:
-    topic-name: "topic1"
+    topic-name: "link-updates"
     partitions: 3
     replication-factor: 1
     bootstrap-servers: localhost:9092
