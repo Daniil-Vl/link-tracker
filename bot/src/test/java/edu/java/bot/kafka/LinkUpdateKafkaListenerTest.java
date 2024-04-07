@@ -76,7 +76,8 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
         );
         sendRequest(linkUpdateRequest);
 
-        verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdates(List.of(linkUpdateRequest));
+//        verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdates(List.of(linkUpdateRequest));
+        verify(linkUpdateHandler, timeout(10000).atLeastOnce()).processLinkUpdate(linkUpdateRequest);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
         boolean messageConsumed = dltConsumer.getLatch().await(10, TimeUnit.SECONDS);
         LinkUpdateRequest payload = dltConsumer.getPayload();
 
-        verify(linkUpdateHandler, never()).processLinkUpdates(List.of(linkUpdateRequest));
+        verify(linkUpdateHandler, never()).processLinkUpdate(linkUpdateRequest);
         assertThat(messageConsumed).isTrue();
         assertThat(payload).isEqualTo(linkUpdateRequest);
     }
@@ -109,13 +110,13 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
         );
         doThrow(RuntimeException.class)
             .when(linkUpdateHandler)
-            .processLinkUpdates(List.of(linkUpdateRequest));
+            .processLinkUpdate(linkUpdateRequest);
 
         sendRequest(linkUpdateRequest);
         boolean messageConsumed = dltConsumer.getLatch().await(10, TimeUnit.SECONDS);
         LinkUpdateRequest payload = dltConsumer.getPayload();
 
-        verify(linkUpdateHandler).processLinkUpdates(List.of(linkUpdateRequest));
+        verify(linkUpdateHandler).processLinkUpdate(linkUpdateRequest);
         assertThat(messageConsumed).isTrue();
         assertThat(payload).isEqualTo(linkUpdateRequest);
     }
