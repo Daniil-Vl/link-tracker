@@ -18,9 +18,10 @@ public record ApplicationConfig(
     String telegramToken,
     @NotBlank
     String scrapperBaseUrl,
-    RateLimit rateLimit
+    @NotNull
+    Retry retry
 ) {
-    public record RateLimit(
+    public record Retry(
         @NotNull
         @PositiveOrZero
         Integer maxAttempts,

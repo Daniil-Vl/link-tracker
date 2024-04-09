@@ -27,7 +27,7 @@ public class ScrapperClientConfiguration {
     @Bean
     public ScrapperClient scrapperClient() {
         RetryFilter retryFilter;
-        ApplicationConfig.RateLimit retryConfig = applicationConfig.rateLimit();
+        ApplicationConfig.Retry retryConfig = applicationConfig.retry();
 
         if (retryConfig == null) {
             retryFilter = defaultRetryFilter();
