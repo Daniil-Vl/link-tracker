@@ -25,6 +25,20 @@ spring:
     username: postgres
     password: postgres
 
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: /metrics
+  server:
+    port: 8100
+
 server:
   port: 8080
 
