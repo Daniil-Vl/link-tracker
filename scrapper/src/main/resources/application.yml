@@ -37,7 +37,7 @@ management:
       path-mapping:
         prometheus: /metrics
   server:
-    port: 8100
+    port: 8081
 
 server:
   port: 8080
