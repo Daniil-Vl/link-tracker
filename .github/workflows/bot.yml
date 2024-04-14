@@ -34,7 +34,7 @@ jobs:
         run: mvn -pl bot -am package
 
       - name: Build docker image
-        run: docker build bot/ --file Dockerfile --tag bot:latest
+        run: docker image build -t bot:latest bot/Dockerfile
 
       - name: Push docker image
         run: docker push ghcr.io/${{ github.repository_owner }}/bot
