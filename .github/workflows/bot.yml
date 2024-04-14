@@ -38,7 +38,7 @@ jobs:
         with:
           context: bot/
           push: true
-          tags: ghcr.io/${{ github.event.repository.name }}/bot:latest
+          tags: ghcr.io/java-backend-2024/bot:latest
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
