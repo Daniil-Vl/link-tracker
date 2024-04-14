@@ -23,8 +23,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker BuildX
+        uses: docker/setup-buildx-action@v3
+
       - name: maven build
         run: mvn -pl bot -am package
+
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: bot/
+          tags: bot
+          push: false
 
       - id: jacoco
         uses: madrapps/jacoco-report@v1.6.1
