@@ -43,7 +43,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: bot/
-          tags: bot
+          tags: ghcr.io/bot
           push: true
 
       - id: jacoco
