@@ -1,0 +1,33 @@
+app:
+  scheduler:
+    enable: false
+    interval: 10s
+    force-check-delay: 1m
+
+  api:
+    bot:
+      base-url: http://localhost:8090
+    github:
+      base-url: https://api.github.com
+      access-token: ${GITHUB_ACCESS_TOKEN}
+    stackoverflow:
+      base-url: https://api.stackexchange.com
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+  application:
+    name: scrapper
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8080
+
+logging:
+  config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
