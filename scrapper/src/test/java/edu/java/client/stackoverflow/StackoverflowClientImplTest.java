@@ -13,6 +13,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -80,7 +81,7 @@ class StackoverflowClientImplTest {
     }
 
     @Test
-    void temp() throws IOException {
+    void givenQuestionId_whenGetAnswers_thenReturnValidAnswersResponse() throws IOException {
         Long questionId = 1L;
 
         String expectedResponseBody = Files.readString(

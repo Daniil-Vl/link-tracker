@@ -19,6 +19,7 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull
     Api api,
+    @Bean
     @NotNull
     RateLimit rateLimit,
     Retry retry,
