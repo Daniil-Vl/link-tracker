@@ -1,6 +1,7 @@
 package edu.java.configuration;
 
 import edu.java.configuration.retrying.BackoffType;
+import edu.java.configuration.domain.AccessType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
@@ -18,10 +19,11 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull
     Api api,
-    @Bean
     @NotNull
     RateLimit rateLimit,
-    Retry retry
+    Retry retry,
+    @NotNull
+    AccessType databaseAccessType
 ) {
     public record Scheduler(boolean enable, @NotNull Duration interval, @NotNull Duration forceCheckDelay) {
     }

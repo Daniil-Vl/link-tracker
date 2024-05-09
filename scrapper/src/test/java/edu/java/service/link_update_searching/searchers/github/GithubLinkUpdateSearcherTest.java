@@ -44,8 +44,8 @@ class GithubLinkUpdateSearcherTest {
                 new GithubEventResponse(
                     1L,
                     "PushEvent",
-                    new GithubEventResponse.Actor(2L, "login"),
-                    new GithubEventResponse.Repo(3L, "name"),
+                    new GithubEventResponse.Actor(2L, "actor_user"),
+                    new GithubEventResponse.Repo(3L, "repo_name"),
                     actualLastActivityDate
                 )
             )
@@ -55,7 +55,7 @@ class GithubLinkUpdateSearcherTest {
             new LinkUpdate(
                 1L,
                 url.toString(),
-                "New Update"
+                "New commit in repository repo_name from user actor_user"
             )
         );
 

@@ -1,6 +1,7 @@
 package edu.java.client.stackoverflow;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.java.dto.stackoverflow.StackoverflowQuestionAnswersResponse;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
 import edu.java.retrying.RetryFilter;
 import java.time.OffsetDateTime;
@@ -49,6 +50,18 @@ public class StackoverflowClientImpl implements StackoverflowClient {
             question.title(),
             question.lastActivityDate()
         );
+    }
+
+    @Override
+    public StackoverflowQuestionAnswersResponse getAnswers(Long questionId) {
+        String endpoint = "2.3/questions/%s/answers?site=stackoverflow".formatted(questionId);
+
+        return webClient
+            .get()
+            .uri(endpoint)
+            .retrieve()
+            .bodyToMono(StackoverflowQuestionAnswersResponse.class)
+            .block();
     }
 
     record Question(
