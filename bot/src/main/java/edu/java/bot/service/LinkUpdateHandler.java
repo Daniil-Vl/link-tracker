@@ -6,8 +6,13 @@ import java.util.List;
 public interface LinkUpdateHandler {
     /**
      * Send messages about updates to the subscribed users
-     *
-     * @param linkUpdateRequest - list of links updates
+     * @param linkUpdateRequestList - list of link updates
      */
-    void processLinkUpdates(List<LinkUpdateRequest> linkUpdateRequest);
+    void processLinkUpdates(List<LinkUpdateRequest> linkUpdateRequestList);
+
+    /**
+     * Send messages about update to the subscribed users
+     * @param linkUpdateRequest - link update
+     */
+    void processLinkUpdate(LinkUpdateRequest linkUpdateRequest);
 }

@@ -1,6 +1,18 @@
 app:
   telegram-token: ${TELEGRAM-TOKEN}
   scrapper-base-url: http://${SCRAPPER_HOST}:${SCRAPPER_PORT}
+  kafka:
+    topic-name: "link-updates"
+    partitions: 3
+    replication-factor: 1
+    bootstrap-servers: localhost:9092
+    group-id: "instance.one"
+
+  retry:
+    max-attempts: 3
+    min-backoff: 2s
+    backoff-type: constant
+    http-statuses: internal_server_error, service_unavailable
 
 spring:
   application:
@@ -17,3 +29,17 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: /metrics
+  server:
+    port: 8091
