@@ -13,6 +13,24 @@ app:
     stackoverflow:
       base-url: https://api.stackexchange.com
 
+  use-queue: false
+
+  rate-limit:
+    capacity: 100
+    refill-rate: 100
+    refill-time-seconds: 3600
+    cache-size: 10_000
+    expire-after-access: 2h
+
+  kafka:
+    topic-name: test-topic
+    group-id: test-group-id
+    partitions: 3
+    replication-factor: 1
+    bootstrap-servers: test-server
+
+  database-access-type: jdbc
+
 spring:
   devtools:
     restart:

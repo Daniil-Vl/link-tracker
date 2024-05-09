@@ -55,8 +55,6 @@ public abstract class IntegrationTest {
     static void kafkaProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.kafka.bootstrap-servers", KAFKA::getBootstrapServers);
         registry.add("app.kafka.bootstrap-servers", KAFKA::getBootstrapServers);
-        registry.add("app.kafka.topic-name", () -> "test-topic");
-        registry.add("app.kafka.group-id", () -> "test-group-id");
     }
 
     @BeforeEach
