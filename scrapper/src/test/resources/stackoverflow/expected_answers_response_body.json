@@ -1,0 +1,45 @@
+{
+    "items": [
+        {
+            "owner": {
+                "account_id": 123,
+                "reputation": 13213,
+                "user_id": 12331234,
+                "user_type": "registered",
+                "profile_image": "profile_image_url",
+                "display_name": "First_user",
+                "link": "https://stackoverflow.com/users/12331234/First_user"
+            },
+            "is_accepted": true,
+            "score": 2,
+            "last_activity_date": 1631382573,
+            "last_edit_date": 1631382573,
+            "creation_date": 1631377041,
+            "answer_id": 2,
+            "question_id": 1,
+            "content_license": "CC BY-SA 4.0"
+        },
+        {
+            "owner": {
+                "account_id": 1234,
+                "reputation": 2214,
+                "user_id": 1234,
+                "user_type": "registered",
+                "accept_rate": 33,
+                "profile_image": "profile_image_url",
+                "display_name": "Second_user",
+                "link": "https://stackoverflow.com/users/1234/Second_user"
+            },
+            "is_accepted": false,
+            "score": 0,
+            "last_activity_date": 1631375978,
+            "creation_date": 1631375978,
+            "answer_id": 3,
+            "question_id": 1,
+            "content_license": "CC BY-SA 4.0"
+        }
+    ],
+    "has_more": false,
+    "quota_max": 300,
+    "quota_remaining": 283
+}
