@@ -1,0 +1,51 @@
+app:
+  scheduler:
+    enable: false
+    interval: 10s
+    force-check-delay: 1m
+
+  api:
+    bot:
+      base-url: http://localhost:8090
+    github:
+      base-url: https://api.github.com
+      access-token: ${GITHUB_ACCESS_TOKEN}
+    stackoverflow:
+      base-url: https://api.stackexchange.com
+
+  use-queue: false
+
+  rate-limit:
+    capacity: 100
+    refill-rate: 100
+    refill-time-seconds: 3600
+    cache-size: 10_000
+    expire-after-access: 2h
+
+  kafka:
+    topic-name: test-topic
+    group-id: test-group-id
+    partitions: 3
+    replication-factor: 1
+    bootstrap-servers: test-server
+
+  database-access-type: jdbc
+
+spring:
+  devtools:
+    restart:
+      enabled: false
+  application:
+    name: scrapper
+  datasource:
+    driver-class-name: org.postgresql.Driver
+
+server:
+  port: 8080
+
+logging:
+  config: classpath:log4j2-plain.xml
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui

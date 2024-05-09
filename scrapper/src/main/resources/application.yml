@@ -8,7 +8,7 @@ app:
 
   api:
     bot:
-      base-url: http://localhost:8090
+      base-url: http://${BOT_HOST}:${BOT_PORT}
     github:
       base-url: https://api.github.com
       access-token: ${GITHUB_ACCESS_TOKEN}
@@ -39,9 +39,9 @@ spring:
     name: scrapper
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/scrapper
-    username: postgres
-    password: postgres
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
   jpa:
     show-sql: true
     hibernate:
@@ -62,7 +62,7 @@ management:
     port: 8081
 
 server:
-  port: 8080
+  port: ${SCRAPPER_PORT}
 
 logging:
   config: classpath:log4j2-plain.xml

@@ -1,6 +1,6 @@
 app:
   telegram-token: ${TELEGRAM-TOKEN}
-  scrapper-base-url: http://localhost:8080
+  scrapper-base-url: http://${SCRAPPER_HOST}:${SCRAPPER_PORT}
   kafka:
     topic-name: "link-updates"
     partitions: 3
@@ -21,7 +21,7 @@ spring:
     time-zone: UTC
 
 server:
-  port: 8090
+  port: ${BOT_PORT}
 
 logging:
   config: classpath:log4j2-plain.xml

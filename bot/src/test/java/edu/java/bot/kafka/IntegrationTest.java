@@ -36,4 +36,9 @@ public class IntegrationTest {
         registry.add("app.kafka.topic-name", () -> "test-topic");
         registry.add("app.kafka.group-id", () -> "test-group-id");
     }
+
+    @DynamicPropertySource
+    static void portProperty(DynamicPropertyRegistry registry) {
+        registry.add("server.port", () -> 8082);
+    }
 }
