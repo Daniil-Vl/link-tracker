@@ -1,4 +1,6 @@
 app:
+  database-access-type: jpa
+
   scheduler:
     enable: true
     interval: 10s
@@ -22,6 +24,12 @@ app:
     bootstrap-servers: localhost:9092
     group-id: "instance.one"
 
+  rate-limit:
+    capacity: 100
+    refill-rate: 100
+    refill-time-seconds: 3600
+    cache-size: 10_000
+    expire-after-access: 2h
 
 spring:
   devtools:
@@ -34,6 +42,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/scrapper
     username: postgres
     password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
 
 server:
   port: 8080

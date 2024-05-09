@@ -5,7 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.ApiErrorResponse;
 import edu.java.LinkUpdateRequest;
 import edu.java.client.AbstractClientServerTest;
+import edu.java.retrying.RetryFilter;
+import edu.java.retrying.backoff.ConstantBackoff;
+import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -20,7 +24,10 @@ class BotClientImplTest extends AbstractClientServerTest {
 
     @Override
     protected void initClient() {
-        botClient = new BotClientImpl(server.baseUrl());
+        botClient = new BotClientImpl(
+            server.baseUrl(),
+            new RetryFilter(new ConstantBackoff(Duration.ZERO), Set.of(), 0)
+        );
     }
 
     @Test
