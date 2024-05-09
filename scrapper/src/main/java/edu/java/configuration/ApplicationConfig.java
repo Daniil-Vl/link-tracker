@@ -1,7 +1,7 @@
 package edu.java.configuration;
 
-import edu.java.configuration.retrying.BackoffType;
 import edu.java.configuration.domain.AccessType;
+import edu.java.configuration.retrying.BackoffType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.Duration;
