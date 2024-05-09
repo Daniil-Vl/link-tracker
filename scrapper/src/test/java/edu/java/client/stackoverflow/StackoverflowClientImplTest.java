@@ -4,13 +4,17 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.stackoverflow.StackoverflowQuestionAnswersResponse;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
+import edu.java.retrying.RetryFilter;
+import edu.java.retrying.backoff.ConstantBackoff;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +35,14 @@ class StackoverflowClientImplTest {
     void init() {
         server = new WireMockServer(56789);
         server.start();
-        stackoverflowClient = new StackoverflowClientImpl(server.baseUrl());
+        stackoverflowClient = new StackoverflowClientImpl(
+            server.baseUrl(),
+            new RetryFilter(
+                new ConstantBackoff(Duration.ZERO),
+                Set.of(),
+                0
+            )
+        );
     }
 
     @AfterEach
@@ -70,7 +81,7 @@ class StackoverflowClientImplTest {
     }
 
     @Test
-    void temp() throws IOException {
+    void givenQuestionId_whenGetAnswers_thenReturnValidAnswersResponse() throws IOException {
         Long questionId = 1L;
 
         String expectedResponseBody = Files.readString(
