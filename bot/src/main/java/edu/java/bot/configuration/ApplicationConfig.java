@@ -4,6 +4,7 @@ import edu.java.bot.configuration.retrying.BackoffType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.time.Duration;
 import java.util.Set;
@@ -19,8 +20,22 @@ public record ApplicationConfig(
     @NotBlank
     String scrapperBaseUrl,
     @NotNull
+    Kafka kafka,
     Retry retry
 ) {
+    public record Kafka(
+        @NotBlank
+        String bootstrapServers,
+        @NotBlank
+        String groupId,
+        @NotBlank
+        String topicName,
+        @Positive
+        Integer partitions,
+        @Positive
+        Integer replicationFactor) {
+    }
+
     public record Retry(
         @NotNull
         @PositiveOrZero

@@ -4,6 +4,7 @@ import edu.java.configuration.domain.AccessType;
 import edu.java.configuration.retrying.BackoffType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import java.time.Duration;
 import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -19,6 +20,10 @@ public record ApplicationConfig(
     Scheduler scheduler,
     @NotNull
     Api api,
+    @NotNull
+    Kafka kafka,
+    @NotNull
+    Boolean useQueue,
     @Bean
     @NotNull
     RateLimit rateLimit,
@@ -70,5 +75,18 @@ public record ApplicationConfig(
             BackoffType backoffType,
             Set<HttpStatus> httpStatuses) {
         }
+    }
+
+    public record Kafka(
+        @NotBlank
+        String bootstrapServers,
+        @NotBlank
+        String groupId,
+        @NotBlank
+        String topicName,
+        @Positive
+        Integer partitions,
+        @Positive
+        Integer replicationFactor) {
     }
 }
