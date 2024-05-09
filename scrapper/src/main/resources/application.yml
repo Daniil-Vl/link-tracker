@@ -47,6 +47,20 @@ spring:
     hibernate:
       ddl-auto: validate
 
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include: health, info, prometheus
+      path-mapping:
+        prometheus: /metrics
+  server:
+    port: 8081
+
 server:
   port: 8080
 

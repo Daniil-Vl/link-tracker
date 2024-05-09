@@ -3,7 +3,6 @@ package edu.java.bot.kafka;
 import edu.java.LinkUpdateRequest;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.service.LinkUpdateHandler;
-import edu.java.bot.telegram.bot.Bot;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +46,6 @@ public class LinkUpdateKafkaListenerTest extends IntegrationTest {
 
     @Autowired
     private DltConsumer dltConsumer;
-
-    // Mock Bot dean to prevent request sending to telegram api
-    @MockBean
-    private Bot bot;
 
     @BeforeEach
     void resetConsumerLatch() {

@@ -1,6 +1,9 @@
 package edu.java.bot.kafka;
 
+import edu.java.bot.telegram.bot.Bot;
+import io.micrometer.core.instrument.Counter;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
@@ -17,6 +20,14 @@ public class IntegrationTest {
     static {
         KAFKA.start();
     }
+
+    // Mock prometheus counter, because spring boot test cannot find PrometheusMeterRegistry bean definition
+    @MockBean
+    private Counter proccesedMessagesCounter;
+
+    // Mock Bot dean to prevent request sending to telegram api
+    @MockBean
+    private Bot bot;
 
     @DynamicPropertySource
     static void kafkaProperties(DynamicPropertyRegistry registry) {

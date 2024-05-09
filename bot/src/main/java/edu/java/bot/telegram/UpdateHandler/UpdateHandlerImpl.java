@@ -4,6 +4,7 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.telegram.message.MessageSender;
 import edu.java.bot.telegram.processing.UserMessageProcessor;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ public class UpdateHandlerImpl implements UpdateHandler {
 
     private final UserMessageProcessor userMessageProcessor;
     private final MessageSender messageSender;
+    private final Counter processedMessages;
 
     @Override
     public void handleUpdate(Update update) {
@@ -23,5 +25,8 @@ public class UpdateHandlerImpl implements UpdateHandler {
 
         SendMessage response = userMessageProcessor.processUpdate(update);
         messageSender.sendMessage(response);
+
+        processedMessages.increment();
+        log.info("Total processed messages: {}", processedMessages.count());
     }
 }
