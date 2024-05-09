@@ -25,12 +25,6 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class LinkUpdaterServiceImplTest {
-    //    private final ApplicationConfig applicationConfig = new ApplicationConfig(
-//        new ApplicationConfig.Scheduler(true, Duration.ZERO, Duration.ZERO),
-//        null,
-//        null,
-//        false
-//    );
     private final ApplicationConfig applicationConfig = new ApplicationConfig(
         new ApplicationConfig.Scheduler(true, Duration.ZERO, Duration.ZERO),
         null,

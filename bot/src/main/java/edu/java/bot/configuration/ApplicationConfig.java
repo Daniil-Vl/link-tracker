@@ -35,6 +35,7 @@ public record ApplicationConfig(
         @Positive
         Integer replicationFactor) {
     }
+
     public record Retry(
         @NotNull
         @PositiveOrZero
