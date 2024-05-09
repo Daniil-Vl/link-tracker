@@ -5,6 +5,7 @@ import edu.java.client.bot.BotClient;
 import edu.java.configuration.ApplicationConfig;
 import edu.java.dto.LinkUpdate;
 import edu.java.dto.dao.LinkDto;
+import edu.java.service.kafka.ScrapperQueueProducer;
 import edu.java.service.link_update_searching.SearchersManagerService;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -16,36 +17,51 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Log4j2
 public class LinkUpdaterServiceImpl implements LinkUpdaterService {
+    private final ApplicationConfig applicationConfig;
     private final LinkService linkService;
-    private final ApplicationConfig.Scheduler scheduler;
-    private final BotClient botClient;
     private final SearchersManagerService searchersManagerService;
+    private final BotClient botClient;
+    private final ScrapperQueueProducer queueProducer;
 
     @Override
     @Transactional
     public int update() {
         log.info("Try to find updates...");
 
+        // Find updates for links that have not been checked for a long time
         int numberOfProcessedUpdates = 0;
-        List<LinkDto> linkDtoList = linkService.findAllOldLinks(scheduler.forceCheckDelay());
-        List<LinkUpdateRequest> linkUpdateRequests = new ArrayList<>();
+        List<LinkDto> linkDtoList = linkService.findAllOldLinks(applicationConfig.scheduler().forceCheckDelay());
+        List<LinkUpdate> updates = new ArrayList<>();
 
         for (LinkDto linkDto : linkDtoList) {
-            List<LinkUpdate> updates = searchersManagerService.getUpdates(linkDto);
-            numberOfProcessedUpdates += updates.size();
-
-            for (LinkUpdate linkUpdate : updates) {
-                linkUpdateRequests.add(
-                    new LinkUpdateRequest(
-                        linkUpdate.id(),
-                        linkUpdate.url(),
-                        linkUpdate.description(),
-                        linkService.getAllSubscribers(linkDto.id())
-                    ));
-            }
+            List<LinkUpdate> linkUpdates = searchersManagerService.getUpdates(linkDto);
+            numberOfProcessedUpdates += linkUpdates.size();
+            updates.addAll(linkUpdates);
         }
 
-        if (!linkUpdateRequests.isEmpty()) {
+        // No updates were found
+        if (updates.isEmpty()) {
+            return 0;
+        }
+
+        // Send updates to the bot
+        if (applicationConfig.useQueue()) {
+            for (LinkUpdate linkUpdate : updates) {
+                queueProducer.send(
+                    linkUpdate,
+                    linkService.getAllSubscribers(linkUpdate.linkId())
+                );
+            }
+        } else {
+            List<LinkUpdateRequest> linkUpdateRequests = updates.stream()
+                .map(linkUpdate -> new LinkUpdateRequest(
+                    linkUpdate.linkId(),
+                    linkUpdate.url(),
+                    linkUpdate.description(),
+                    linkService.getAllSubscribers(linkUpdate.linkId())
+                ))
+                .toList();
+
             botClient.sendLinkUpdateRequest(linkUpdateRequests);
         }
 

@@ -1,7 +1,9 @@
 package edu.java.client.stackoverflow;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import edu.java.dto.stackoverflow.StackoverflowQuestionAnswersResponse;
 import edu.java.dto.stackoverflow.StackoverflowQuestionResponse;
+import edu.java.retrying.RetryFilter;
 import java.time.OffsetDateTime;
 import java.util.List;
 import org.springframework.http.MediaType;
@@ -11,18 +13,19 @@ public class StackoverflowClientImpl implements StackoverflowClient {
     private final WebClient webClient;
     private String baseURL = "https://api.stackexchange.com";
 
-    public StackoverflowClientImpl(String baseURL) {
+    public StackoverflowClientImpl(String baseURL, RetryFilter retryFilter) {
         this.baseURL = baseURL;
-        this.webClient = buildWebClient(baseURL);
+        this.webClient = buildWebClient(baseURL, retryFilter);
     }
 
-    public StackoverflowClientImpl() {
-        this.webClient = buildWebClient(baseURL);
+    public StackoverflowClientImpl(RetryFilter retryFilter) {
+        this.webClient = buildWebClient(baseURL, retryFilter);
     }
 
-    private WebClient buildWebClient(String baseURL) {
+    private WebClient buildWebClient(String baseURL, RetryFilter retryFilter) {
         return WebClient.builder()
             .baseUrl(baseURL)
+            .filter(retryFilter)
             .defaultHeaders(httpHeaders -> {
                 httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
             })
@@ -47,6 +50,18 @@ public class StackoverflowClientImpl implements StackoverflowClient {
             question.title(),
             question.lastActivityDate()
         );
+    }
+
+    @Override
+    public StackoverflowQuestionAnswersResponse getAnswers(Long questionId) {
+        String endpoint = "2.3/questions/%s/answers?site=stackoverflow".formatted(questionId);
+
+        return webClient
+            .get()
+            .uri(endpoint)
+            .retrieve()
+            .bodyToMono(StackoverflowQuestionAnswersResponse.class)
+            .block();
     }
 
     record Question(

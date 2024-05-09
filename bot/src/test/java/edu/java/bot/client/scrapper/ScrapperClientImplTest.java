@@ -4,13 +4,17 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.ApiErrorResponse;
 import edu.java.bot.client.AbstractClientServerTest;
+import edu.java.bot.retrying.RetryFilter;
+import edu.java.bot.retrying.backoff.ConstantBackoff;
 import edu.java.exceptions.ApiErrorException;
 import edu.java.scrapper.AddLinkRequest;
 import edu.java.scrapper.LinkResponse;
 import edu.java.scrapper.ListLinksResponse;
 import edu.java.scrapper.RemoveLinkRequest;
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,7 +37,14 @@ class ScrapperClientImplTest extends AbstractClientServerTest {
 
     @Override
     protected void initClient() {
-        scrapperClient = new ScrapperClientImpl(server.baseUrl());
+        scrapperClient = new ScrapperClientImpl(
+            server.baseUrl(),
+            new RetryFilter(
+                new ConstantBackoff(Duration.ZERO),
+                Set.of(),
+                0
+            )
+        );
     }
 
     @Test

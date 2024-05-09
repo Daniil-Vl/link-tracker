@@ -1,6 +1,7 @@
 package edu.java.bot.client.scrapper;
 
 import edu.java.ApiErrorResponse;
+import edu.java.bot.retrying.RetryFilter;
 import edu.java.exceptions.ApiErrorException;
 import edu.java.scrapper.AddLinkRequest;
 import edu.java.scrapper.LinkResponse;
@@ -26,18 +27,19 @@ public class ScrapperClientImpl implements ScrapperClient {
     private final WebClient webClient;
     private String baseUrl = "http://localhost:8080";
 
-    public ScrapperClientImpl(String baseUrl) {
+    public ScrapperClientImpl(String baseUrl, RetryFilter retryFilter) {
         this.baseUrl = baseUrl;
-        this.webClient = buildWebClient(baseUrl);
+        this.webClient = buildWebClient(baseUrl, retryFilter);
     }
 
-    public ScrapperClientImpl() {
-        this.webClient = buildWebClient(baseUrl);
+    public ScrapperClientImpl(RetryFilter retryFilter) {
+        this.webClient = buildWebClient(baseUrl, retryFilter);
     }
 
-    private WebClient buildWebClient(String baseUrl) {
+    private WebClient buildWebClient(String baseUrl, RetryFilter retryFilter) {
         return WebClient.builder()
             .baseUrl(baseUrl)
+            .filter(retryFilter)
             .defaultHeaders(httpHeaders -> {
                 httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
             })

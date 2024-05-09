@@ -3,10 +3,14 @@ package edu.java.client.github;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.dto.github.GithubEventResponse;
+import edu.java.retrying.RetryFilter;
+import edu.java.retrying.backoff.ConstantBackoff;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +31,15 @@ class GithubClientImplTest {
     void init() {
         server = new WireMockServer();
         server.start();
-        githubClient = new GithubClientImpl(server.baseUrl(), "github_access_token");
+        githubClient = new GithubClientImpl(
+            server.baseUrl(),
+            "github_access_token",
+            new RetryFilter(
+                new ConstantBackoff(Duration.ZERO),
+                Set.of(),
+                0
+            )
+        );
     }
 
     @AfterEach

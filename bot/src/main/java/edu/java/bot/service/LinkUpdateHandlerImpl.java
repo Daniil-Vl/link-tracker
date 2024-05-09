@@ -22,14 +22,17 @@ public class LinkUpdateHandlerImpl implements LinkUpdateHandler {
 
     @Override
     public void processLinkUpdates(List<LinkUpdateRequest> linkUpdateRequests) {
-        for (LinkUpdateRequest linkUpdate : linkUpdateRequests) {
-            for (Long userId : linkUpdate.ids()) {
-                sendUpdateMessage(
-                    userId,
-                    linkUpdate.url(),
-                    linkUpdate.description()
-                );
-            }
+        linkUpdateRequests.forEach(this::processLinkUpdate);
+    }
+
+    @Override
+    public void processLinkUpdate(LinkUpdateRequest linkUpdateRequest) {
+        for (Long userId : linkUpdateRequest.ids()) {
+            sendUpdateMessage(
+                userId,
+                linkUpdateRequest.url(),
+                linkUpdateRequest.description()
+            );
         }
     }
 

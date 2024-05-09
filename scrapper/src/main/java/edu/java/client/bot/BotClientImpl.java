@@ -2,6 +2,7 @@ package edu.java.client.bot;
 
 import edu.java.ApiErrorResponse;
 import edu.java.LinkUpdateRequest;
+import edu.java.retrying.RetryFilter;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -14,18 +15,19 @@ public class BotClientImpl implements BotClient {
     private final WebClient webClient;
     private String baseUrl = "http://localhost:8090";
 
-    public BotClientImpl() {
-        this.webClient = buildWebClient(baseUrl);
+    public BotClientImpl(RetryFilter retryFilter) {
+        this.webClient = buildWebClient(baseUrl, retryFilter);
     }
 
-    public BotClientImpl(String baseUrl) {
+    public BotClientImpl(String baseUrl, RetryFilter retryFilter) {
         this.baseUrl = baseUrl;
-        this.webClient = buildWebClient(baseUrl);
+        this.webClient = buildWebClient(baseUrl, retryFilter);
     }
 
-    private WebClient buildWebClient(String baseUrl) {
+    private WebClient buildWebClient(String baseUrl, RetryFilter retryFilter) {
         return WebClient.builder()
             .baseUrl(baseUrl)
+            .filter(retryFilter)
             .defaultHeaders(httpHeaders -> {
                 httpHeaders.setAccept(List.of(MediaType.APPLICATION_JSON));
             })

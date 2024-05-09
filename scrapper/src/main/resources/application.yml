@@ -1,4 +1,6 @@
 app:
+  database-access-type: jpa
+
   scheduler:
     enable: true
     interval: 10s
@@ -13,6 +15,22 @@ app:
     stackoverflow:
       base-url: https://api.stackexchange.com
 
+  use-queue: false
+
+  kafka:
+    topic-name: "link-updates"
+    partitions: 3
+    replication-factor: 1
+    bootstrap-servers: localhost:9092
+    group-id: "instance.one"
+
+  rate-limit:
+    capacity: 100
+    refill-rate: 100
+    refill-time-seconds: 3600
+    cache-size: 10_000
+    expire-after-access: 2h
+
 spring:
   devtools:
     restart:
@@ -24,6 +42,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/scrapper
     username: postgres
     password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
 
 management:
   metrics:
