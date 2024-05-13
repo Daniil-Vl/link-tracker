@@ -8,10 +8,25 @@
 Приложение для отслеживания обновлений контента по ссылкам.
 При появлении новых событий отправляется уведомление в Telegram.
 
-Проект написан на `Java 21` с использованием `Spring Boot 3`.
-
 Проект состоит из 2-х приложений:
 * Bot
 * Scrapper
 
-Для работы требуется БД `PostgreSQL`. Присутствует опциональная зависимость на `Kafka`.
+Приложения общаются с помощью HTTP запросов или с помощью сообщений в Kafka. Можно выбрать желаемый способ общения.
+
+Приложение Scrapper взаимодействует с PostgreSQL.
+
+## Технологический стек
++ Java 21
++ Spring Boot 3
++ PostgreSQL
++ Liquibase
++ Kafka
++ [Pengrad Telegram Bot API](https://github.com/pengrad/java-telegram-bot-api)
++ Docker
++ JUnit 5, Mockito, WireMock, TestContainers
++ Prometheus
++ Grafana
+
+## Схема приложения
+![Link tracker architecture](https://github.com/Daniil-Vl/java-backend-2024/assets/68438400/77d32e0f-7cf8-4b96-b525-57111bcd55a2)
